@@ -6,7 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class HomeScreen extends JFrame {
-    private JPanel mainPanel; // Declare mainPanel at the class level
+    private JPanel mainPanel;
+    private JPanel panel1;
+    private JButton button1;
 
     public HomeScreen() {
         // Set up the frame
@@ -24,22 +26,25 @@ public class HomeScreen extends JFrame {
         JButton homeButton = new JButton("Home");
         homeButton.setForeground(Color.WHITE);
         homeButton.setBackground(Color.BLUE);
+        homeButton.setBorderPainted(false);
+
         JButton profileButton = new JButton("My Cart");
         profileButton.setForeground(Color.WHITE);
         profileButton.setBackground(Color.BLUE);
+        profileButton.setBorderPainted(false);
+
         JButton settingsButton = new JButton("Profile");
         settingsButton.setForeground(Color.WHITE);
         settingsButton.setBackground(Color.BLUE);
+        settingsButton.setBorderPainted(false);
+
         JButton logoutButton = new JButton("Logout");
         logoutButton.setForeground(Color.WHITE);
         logoutButton.setBackground(Color.BLUE);
+        logoutButton.setBorderPainted(false);
 
         // Add action listeners to the buttons
-        homeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                showPanel("Home");
-            }
-        });
+
 
         profileButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -59,7 +64,6 @@ public class HomeScreen extends JFrame {
             }
         });
 
-        // Add buttons to the sidebar
         sidebar.add(homeButton);
         sidebar.add(profileButton);
         sidebar.add(settingsButton);
@@ -67,23 +71,33 @@ public class HomeScreen extends JFrame {
 
         // Create the main panel
         mainPanel = new JPanel(new CardLayout());
-
-        // Add different panels for each section
-        mainPanel.add(new JLabel("Home Panel"), "Home");
+        JPanel homePanel = new JPanel();
+        homePanel.setLayout(new GridLayout(0, 3, 10, 10));
+        for(int i =0 ; i<9 ; i++){
+            homePanel.add(new CardGridview());
+        }
+        JScrollPane homeScrollPane = new JScrollPane(homePanel);
+        mainPanel.add(homeScrollPane);
         mainPanel.add(new JLabel("Profile Panel"), "Profile");
-        mainPanel.add(new JLabel("Settings Panel"), "Settings");
+
 
         // Add the sidebar and main panel to the frame
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(sidebar, BorderLayout.WEST);
         getContentPane().add(mainPanel, BorderLayout.CENTER);
 
-        // Set default panel
-        showPanel("Home");
+        homeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mainPanel.removeAll();
+                mainPanel.add(homeScrollPane);
+                mainPanel.revalidate();
+                mainPanel.repaint();
+            }
+        });
     }
 
     private void showPanel(String panelName) {
-        CardLayout cardLayout = (CardLayout) mainPanel.getLayout(); // Use mainPanel's layout
+        CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
         cardLayout.show(mainPanel, panelName);
     }
 
