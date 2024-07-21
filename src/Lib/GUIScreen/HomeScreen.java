@@ -9,6 +9,7 @@ public class HomeScreen extends JFrame {
     private JPanel mainPanel;
     private JPanel panel1;
     private JButton button1;
+    private ProfileScreen profileScreen;
 
     public HomeScreen() {
         // Set up the frame
@@ -85,6 +86,7 @@ public class HomeScreen extends JFrame {
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(sidebar, BorderLayout.WEST);
         getContentPane().add(mainPanel, BorderLayout.CENTER);
+        setVisible(true);
 
         homeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -98,14 +100,18 @@ public class HomeScreen extends JFrame {
 
     private void showPanel(String panelName) {
         CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+        profileScreen = new ProfileScreen();
+        if (panelName.equals("Profile")) {
+            mainPanel.add(profileScreen, panelName);
+        }
         cardLayout.show(mainPanel, panelName);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new HomeScreen().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                new HomeScreen().setVisible(true);
+//            }
+//        });
+//    }
 }
