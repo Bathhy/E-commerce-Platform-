@@ -8,10 +8,10 @@ import java.awt.event.ActionListener;
 public class CardGridview extends JPanel {
     private int quantity = 0;
 
-    public CardGridview() {
+    public CardGridview(JButton actbutton) {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
+        setPreferredSize(new Dimension(300, 150));
         // Panel for product name and add to cart button (top row)
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(Color.WHITE);
@@ -19,10 +19,9 @@ public class CardGridview extends JPanel {
         JLabel productname = new JLabel("Nike Shoe");
         topPanel.add(productname, BorderLayout.WEST);
 
-        JButton addtocartButton = new JButton("Add To Cart");
-        addtocartButton.setFont(new Font("Arial", Font.BOLD, 10));
-        addtocartButton.setPreferredSize(new Dimension(100, 30)); // Set button size as needed
-        topPanel.add(addtocartButton, BorderLayout.EAST);
+        actbutton.setFont(new Font("Arial", Font.BOLD, 10));
+        actbutton.setPreferredSize(new Dimension(100, 30)); // Set button size as needed
+        topPanel.add(actbutton, BorderLayout.EAST);
 
         add(topPanel, BorderLayout.NORTH);
 
@@ -66,23 +65,5 @@ public class CardGridview extends JPanel {
 
         JLabel textLabel = new JLabel("$169.00");
         controlsPanel.add(textLabel);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JFrame frame = new JFrame("Grid List of Cards");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(600, 600);
-                JPanel mainPanel = new JPanel();
-                mainPanel.setLayout(new GridLayout(3, 3, 10, 10));
-                frame.add(new JScrollPane(mainPanel));
-                for (int i = 0; i < 9; i++) { // Create 9 cards
-                    mainPanel.add(new CardGridview());
-                }
-                frame.setVisible(true);
-            }
-        });
     }
 }
