@@ -10,6 +10,7 @@ public class HomeScreen extends JFrame {
     private JPanel panel1;
     private JButton button1;
     private ProfileScreen profileScreen;
+    private CartScreen cartScreen;
 
     public HomeScreen() {
         // Set up the frame
@@ -71,15 +72,15 @@ public class HomeScreen extends JFrame {
         sidebar.add(logoutButton);
 
         // Create the main panel
+        JButton addtocardbutton = new JButton("Add To Cart");
         mainPanel = new JPanel(new CardLayout());
         JPanel homePanel = new JPanel();
         homePanel.setLayout(new GridLayout(0, 3, 10, 10));
         for(int i =0 ; i<9 ; i++){
-            homePanel.add(new CardGridview());
+            homePanel.add(new CardGridview(new JButton(addtocardbutton.getText())));
         }
         JScrollPane homeScrollPane = new JScrollPane(homePanel);
         mainPanel.add(homeScrollPane);
-        mainPanel.add(new JLabel("Profile Panel"), "Profile");
 
 
         // Add the sidebar and main panel to the frame
@@ -101,8 +102,12 @@ public class HomeScreen extends JFrame {
     private void showPanel(String panelName) {
         CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
         profileScreen = new ProfileScreen();
-        if (panelName.equals("Profile")) {
-            mainPanel.add(profileScreen, panelName);
+        cartScreen = new CartScreen();
+        switch(panelName){
+            case "Profile":mainPanel.add(profileScreen, panelName);
+            break;
+            case "My Cart":mainPanel.add(cartScreen, panelName);
+            break;
         }
         cardLayout.show(mainPanel, panelName);
     }
