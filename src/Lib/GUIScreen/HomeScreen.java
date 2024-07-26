@@ -11,6 +11,7 @@ public class HomeScreen extends JFrame {
     private JButton button1;
     private ProfileScreen profileScreen;
     private CartScreen cartScreen;
+    private JTextField searchField;
 
     public HomeScreen() {
         // Set up the frame
@@ -46,8 +47,6 @@ public class HomeScreen extends JFrame {
         logoutButton.setBorderPainted(false);
 
         // Add action listeners to the buttons
-
-
         profileButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 showPanel("My Cart");
@@ -71,17 +70,44 @@ public class HomeScreen extends JFrame {
         sidebar.add(settingsButton);
         sidebar.add(logoutButton);
 
-        // Create the main panel
-        JButton addtocardbutton = new JButton("Add To Cart");
-        mainPanel = new JPanel(new CardLayout());
+        // Create the main panel with search bar
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+        searchField = new JTextField("Search...");
+        searchField.setPreferredSize(new Dimension(200, 30));
+        searchField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String query = searchField.getText();
+                // Implement search functionality here
+                System.out.println("Searching for: " + query);
+            }
+        });
+        searchPanel.add(searchField);
+
+        JButton searchButton = new JButton("Search");
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String query = searchField.getText();
+                // Implement search functionality here
+                System.out.println("Searching for: " + query);
+            }
+        });
+        searchPanel.add(searchButton);
+
+        // Add the searchPanel to the mainPanel
+        mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(searchPanel, BorderLayout.NORTH);
+
+        // Create and add the home panel with scroll pane
         JPanel homePanel = new JPanel();
         homePanel.setLayout(new GridLayout(0, 3, 10, 10));
-        for(int i =0 ; i<9 ; i++){
-            homePanel.add(new CardGridview(new JButton(addtocardbutton.getText())));
+        for (int i = 0; i < 9; i++) {
+            homePanel.add(new CardGridview(new JButton("Add To Cart")));
         }
         JScrollPane homeScrollPane = new JScrollPane(homePanel);
-        mainPanel.add(homeScrollPane);
-
+        mainPanel.add(homeScrollPane, BorderLayout.CENTER);
 
         // Add the sidebar and main panel to the frame
         getContentPane().setLayout(new BorderLayout());
@@ -92,7 +118,8 @@ public class HomeScreen extends JFrame {
         homeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mainPanel.removeAll();
-                mainPanel.add(homeScrollPane);
+                mainPanel.add(searchPanel, BorderLayout.NORTH);
+                mainPanel.add(homeScrollPane, BorderLayout.CENTER);
                 mainPanel.revalidate();
                 mainPanel.repaint();
             }
@@ -103,20 +130,22 @@ public class HomeScreen extends JFrame {
         CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
         profileScreen = new ProfileScreen();
         cartScreen = new CartScreen();
-        switch(panelName){
-            case "Profile":mainPanel.add(profileScreen, panelName);
-            break;
-            case "My Cart":mainPanel.add(cartScreen, panelName);
-            break;
+        switch (panelName) {
+            case "Profile":
+                mainPanel.add(profileScreen, panelName);
+                break;
+            case "My Cart":
+                mainPanel.add(cartScreen, panelName);
+                break;
         }
         cardLayout.show(mainPanel, panelName);
     }
 
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(new Runnable() {
-//            public void run() {
-//                new HomeScreen().setVisible(true);
-//            }
-//        });
-//    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new HomeScreen().setVisible(true);
+            }
+        });
+    }
 }
