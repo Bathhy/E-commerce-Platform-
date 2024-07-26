@@ -143,7 +143,7 @@ public class LoginScreen extends JFrame implements ActionListener {
         dispose();
     }
     public void navigateHome(ActionEvent e){
-        new HomeScreen();
+        new Homescreenecom();
         dispose();
     }
 

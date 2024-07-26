@@ -5,15 +5,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class HomeScreen extends JFrame {
-    private JPanel mainPanel;
-    private JPanel panel1;
-    private JButton button1;
+public class Homescreenecom extends JFrame {
+    private JPanel contentPanel;
+    private JPanel searchPanel;
+    private JPanel homePanel;
     private ProfileScreen profileScreen;
     private CartScreen cartScreen;
     private JTextField searchField;
 
-    public HomeScreen() {
+    public Homescreenecom() {
         // Set up the frame
         setTitle("E-Commerce Platform");
         setSize(800, 600);
@@ -31,15 +31,15 @@ public class HomeScreen extends JFrame {
         homeButton.setBackground(Color.BLUE);
         homeButton.setBorderPainted(false);
 
-        JButton profileButton = new JButton("My Cart");
+        JButton cartButton = new JButton("My Cart");
+        cartButton.setForeground(Color.WHITE);
+        cartButton.setBackground(Color.BLUE);
+        cartButton.setBorderPainted(false);
+
+        JButton profileButton = new JButton("Profile");
         profileButton.setForeground(Color.WHITE);
         profileButton.setBackground(Color.BLUE);
         profileButton.setBorderPainted(false);
-
-        JButton settingsButton = new JButton("Profile");
-        settingsButton.setForeground(Color.WHITE);
-        settingsButton.setBackground(Color.BLUE);
-        settingsButton.setBorderPainted(false);
 
         JButton logoutButton = new JButton("Logout");
         logoutButton.setForeground(Color.WHITE);
@@ -47,13 +47,13 @@ public class HomeScreen extends JFrame {
         logoutButton.setBorderPainted(false);
 
         // Add action listeners to the buttons
-        profileButton.addActionListener(new ActionListener() {
+        cartButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 showPanel("My Cart");
             }
         });
 
-        settingsButton.addActionListener(new ActionListener() {
+        profileButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 showPanel("Profile");
             }
@@ -66,20 +66,18 @@ public class HomeScreen extends JFrame {
         });
 
         sidebar.add(homeButton);
+        sidebar.add(cartButton);
         sidebar.add(profileButton);
-        sidebar.add(settingsButton);
         sidebar.add(logoutButton);
 
-        // Create the main panel with search bar
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
+        // Create the search panel
+        searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         searchField = new JTextField("Search...");
         searchField.setPreferredSize(new Dimension(200, 30));
         searchField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String query = searchField.getText();
-                // Implement search functionality here
                 System.out.println("Searching for: " + query);
             }
         });
@@ -90,62 +88,54 @@ public class HomeScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String query = searchField.getText();
-                // Implement search functionality here
                 System.out.println("Searching for: " + query);
             }
         });
         searchPanel.add(searchButton);
 
-        // Add the searchPanel to the mainPanel
-        mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(searchPanel, BorderLayout.NORTH);
+        // Create the content panel with CardLayout
+        contentPanel = new JPanel(new CardLayout());
 
         // Create and add the home panel with scroll pane
-        JPanel homePanel = new JPanel();
-        homePanel.setLayout(new GridLayout(0, 3, 10, 10));
+        homePanel = new JPanel(new BorderLayout());
+        JPanel homeContentPanel = new JPanel();
+        homeContentPanel.setLayout(new GridLayout(0, 3, 10, 10));
         for (int i = 0; i < 9; i++) {
-            homePanel.add(new CardGridview(new JButton("Add To Cart")));
+            homeContentPanel.add(new CardGridview(new JButton("Add To Cart")));
         }
-        JScrollPane homeScrollPane = new JScrollPane(homePanel);
-        mainPanel.add(homeScrollPane, BorderLayout.CENTER);
+        JScrollPane homeScrollPane = new JScrollPane(homeContentPanel);
 
-        // Add the sidebar and main panel to the frame
+        homePanel.add(searchPanel, BorderLayout.NORTH);
+        homePanel.add(homeScrollPane, BorderLayout.CENTER);
+
+        // Add the home panel to the contentPanel
+        contentPanel.add(homePanel, "HomePanel");
+
+        // Initialize profile and cart screens
+        profileScreen = new ProfileScreen();
+        cartScreen = new CartScreen();
+
+        // Add profile and cart screens to the contentPanel
+        contentPanel.add(profileScreen, "Profile");
+        contentPanel.add(cartScreen, "My Cart");
+
+        // Add the sidebar and contentPanel to the frame
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(sidebar, BorderLayout.WEST);
-        getContentPane().add(mainPanel, BorderLayout.CENTER);
+        getContentPane().add(contentPanel, BorderLayout.CENTER);
+
         setVisible(true);
 
         homeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mainPanel.removeAll();
-                mainPanel.add(searchPanel, BorderLayout.NORTH);
-                mainPanel.add(homeScrollPane, BorderLayout.CENTER);
-                mainPanel.revalidate();
-                mainPanel.repaint();
+                CardLayout cl = (CardLayout) contentPanel.getLayout();
+                cl.show(contentPanel, "HomePanel");
             }
         });
     }
 
     private void showPanel(String panelName) {
-        CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
-        profileScreen = new ProfileScreen();
-        cartScreen = new CartScreen();
-        switch (panelName) {
-            case "Profile":
-                mainPanel.add(profileScreen, panelName);
-                break;
-            case "My Cart":
-                mainPanel.add(cartScreen, panelName);
-                break;
-        }
-        cardLayout.show(mainPanel, panelName);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new HomeScreen().setVisible(true);
-            }
-        });
+        CardLayout cardLayout = (CardLayout) contentPanel.getLayout();
+        cardLayout.show(contentPanel, panelName);
     }
 }
