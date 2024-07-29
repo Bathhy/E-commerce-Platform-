@@ -118,6 +118,40 @@ public class CreditCardPaymentForm {
         gbc.gridwidth = 2;
         frame.add(expirationPanel, gbc);
 
+        // Confirm Payment Button
+        JButton confirmPaymentButton = new JButton("Confirm Payment");
+        gbc.gridx = 1;
+        gbc.gridy = 8;
+        gbc.gridwidth = 2;
+        frame.add(confirmPaymentButton, gbc);
+
+        // Customize the Confirm Payment Button
+        confirmPaymentButton.setForeground(Color.WHITE); // Set text color to white
+        confirmPaymentButton.setBackground(Color.BLUE);  // Set background color to blue
+        confirmPaymentButton.setOpaque(true);            // Make sure background color is visible
+        confirmPaymentButton.setBorderPainted(false);    // Remove the border
+
+        // Handle button clicks
+        confirmPaymentButton.addActionListener(e -> {
+            // Retrieve input values
+            String owner = ownerField.getText();
+            String phone = phoneField.getText();
+            String cardNumber = cardNumberField.getText();
+            String cvv = cvvField.getText();
+            String month = monthField.getText();
+            String year = yearField.getText();
+            
+            // Print or process the payment details
+            System.out.println("Confirm Payment button clicked");
+            System.out.println("Owner: " + owner);
+            System.out.println("Phone: " + phone);
+            System.out.println("Card Number: " + cardNumber);
+            System.out.println("CVV: " + cvv);
+            System.out.println("Expiration Date: " + month + "/" + year);
+
+            // Add any additional validation or processing logic here
+        });
+
         // Display the frame
         frame.setVisible(true);
     }
