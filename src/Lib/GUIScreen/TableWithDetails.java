@@ -1,5 +1,8 @@
 package ScreenOrder;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -7,10 +10,14 @@ public class TableWithDetails {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
+            // Create the main frame
             JFrame frame = new JFrame("Order Details Table");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(800, 600);
             frame.setLayout(new BorderLayout());
+
+            // Set frame background color
+            frame.getContentPane().setBackground(Color.WHITE);
 
             // Define column names
             String[] columnNames = {
@@ -34,6 +41,21 @@ public class TableWithDetails {
 
             // Create a JTable with data and column names
             JTable table = new JTable(data, columnNames);
+
+            // Set table background and foreground color
+            table.setBackground(Color.WHITE);
+            table.setForeground(Color.BLACK);
+
+            // Set table header background and foreground color
+            JTableHeader header = table.getTableHeader();
+            header.setBackground(Color.BLACK);
+            header.setForeground(Color.WHITE);
+
+            // Set cell renderer to center-align text
+            DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+            renderer.setHorizontalAlignment(JLabel.CENTER);
+
+            // Add table to a scroll pane
             JScrollPane scrollPane = new JScrollPane(table);
             frame.add(scrollPane, BorderLayout.CENTER);
 
@@ -88,6 +110,23 @@ public class TableWithDetails {
                     }
                 }
             });
+
+            // Create the "Continue Shopping" button
+            JButton continueShoppingButton = new JButton("Continue Shopping");
+            continueShoppingButton.setBackground(Color.BLUE);
+            continueShoppingButton.setForeground(Color.WHITE);
+            continueShoppingButton.addActionListener(e -> {
+                // Handle button click
+                JOptionPane.showMessageDialog(frame, "Continue shopping clicked!");
+            });
+
+            // Create a panel for the button and add the button to the panel
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.setBackground(Color.WHITE); // Set panel background color to match the frame
+            buttonPanel.add(continueShoppingButton);
+
+            // Add the button panel to the frame at the bottom
+            frame.add(buttonPanel, BorderLayout.SOUTH);
 
             // Display the frame
             frame.setVisible(true);
