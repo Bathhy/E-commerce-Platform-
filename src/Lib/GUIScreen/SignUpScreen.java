@@ -1,5 +1,6 @@
 package Lib.GUIScreen;
 
+import Navigator.Navigate;
 import constant.Constant;
 
 import javax.imageio.ImageIO;
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class SignUpScreen extends JFrame implements ActionListener {
+public class SignUpScreen extends JFrame{
     private Container container;
     private JPanel leftPanel;
     private JPanel rightPanel;
@@ -27,7 +28,7 @@ public class SignUpScreen extends JFrame implements ActionListener {
     private JButton signbutton;
     private JButton loginbutton;
     private JLabel resLabel;
-
+    Navigate nav = new Navigate(this);
     public SignUpScreen() {
         Constant mycont = new Constant();
         URL logourl;
@@ -42,7 +43,7 @@ public class SignUpScreen extends JFrame implements ActionListener {
             throw new RuntimeException(e);
         }
         setTitle("E-Commerce Platform");
-        setSize(800, 600);
+        setSize(Constant.screenwidth, Constant.screenheight);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         container = getContentPane();
@@ -117,7 +118,9 @@ public class SignUpScreen extends JFrame implements ActionListener {
 
         signbutton = new JButton("Sign Up");
         signbutton.setBounds(150, 220, 100, 30);
-        signbutton.addActionListener(this);
+        signbutton.addActionListener(e -> {
+            nav.navigatelogin(e);
+        });
         signbutton.setForeground(Color.WHITE);
         signbutton.setBackground(Color.BLUE);
         rightPanel.add(signbutton);
@@ -130,7 +133,9 @@ public class SignUpScreen extends JFrame implements ActionListener {
         loginbutton = new JButton("Login");
         loginbutton.setBounds(190, 260, 100, 30);
         loginbutton.setForeground(Color.ORANGE);
-        loginbutton.addActionListener(this::navigateBack);
+        loginbutton.addActionListener(e -> {
+            nav.navigatelogin(e);
+        });
         rightPanel.add(loginbutton);
 
         resLabel = new JLabel("");
@@ -145,14 +150,5 @@ public class SignUpScreen extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // Handle signup logic here
-    }
-
-    public void navigateBack(ActionEvent e) {
-        new LoginScreen();
-        dispose();
-    }
 
 }

@@ -1,5 +1,6 @@
 package Lib.GUIScreen;
 
+import Navigator.Navigate;
 import constant.Constant;
 
 import javax.imageio.ImageIO;
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class LoginScreen extends JFrame implements ActionListener {
+public class LoginScreen extends JFrame  {
     private Container container;
     private JPanel leftPanel;
     private JPanel rightPanel;
@@ -25,7 +26,7 @@ public class LoginScreen extends JFrame implements ActionListener {
     private JButton signupbutton;
     private JLabel asksignuplabel;
     private boolean istogglepassword = false;
-
+    Navigate nav = new Navigate(this);
     public LoginScreen() {
         Constant mycont = new Constant();
         URL logourl;
@@ -35,7 +36,7 @@ public class LoginScreen extends JFrame implements ActionListener {
             throw new RuntimeException(e);
         }
         setTitle("E-Commerce Platform");
-        setSize(800, 600);
+        setSize(Constant.screenwidth, Constant.screenheight);
         try {
             setIconImage(ImageIO.read(logourl));
         } catch (IOException e) {
@@ -98,10 +99,14 @@ public class LoginScreen extends JFrame implements ActionListener {
 
         loginbutton = new JButton("Login");
         loginbutton.setBounds(150, 140, 100, 30);
-        loginbutton.addActionListener(this);
+        loginbutton.addActionListener(e -> {
+            nav.navigateHome(e);
+        });
         loginbutton.setForeground(Color.WHITE);
         loginbutton.setBackground(Color.BLUE);
-        loginbutton.addActionListener(this::navigateHome);
+        loginbutton.addActionListener(e -> {
+            nav.navigateHome(e);
+        });
         rightPanel.add(loginbutton);
 
         asksignuplabel = new JLabel("Don't Have Account Yet?");
@@ -112,7 +117,9 @@ public class LoginScreen extends JFrame implements ActionListener {
         signupbutton = new JButton("Sign Up");
         signupbutton.setBounds(210, 180, 100, 30);
         signupbutton.setForeground(Color.ORANGE);
-        signupbutton.addActionListener(this::navigateSignup);
+        signupbutton.addActionListener(e -> {
+            nav.navigateSignup(e);
+        });
         rightPanel.add(signupbutton);
 
         result = new JLabel("");
@@ -127,24 +134,15 @@ public class LoginScreen extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-//        String usernametextediting = usertextField.getText();
-//        String passwordtexttediting = new String(passwordField.getPassword());
-//        if (usernametextediting.isEmpty() && passwordtexttediting.isEmpty()) {
-//            result.setText("Please Enter your Username and Password");
-//        } else if (passwordtexttediting.length() < 8) {
-//            result.setText("Password must be 8 characters");
-//        }
-    }
-
-    public void navigateSignup(ActionEvent e) {
-        new SignUpScreen();
-        dispose();
-    }
-    public void navigateHome(ActionEvent e){
-        new Homescreenecom();
-        dispose();
-    }
+//    @Override
+//    public void actionPerformed(ActionEvent e) {
+////        String usernametextediting = usertextField.getText();
+////        String passwordtexttediting = new String(passwordField.getPassword());
+////        if (usernametextediting.isEmpty() && passwordtexttediting.isEmpty()) {
+////            result.setText("Please Enter your Username and Password");
+////        } else if (passwordtexttediting.length() < 8) {
+////            result.setText("Password must be 8 characters");
+////        }
+//    }
 
 }
