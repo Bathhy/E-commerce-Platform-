@@ -1,5 +1,7 @@
 package Lib.GUIScreen;
 
+import constant.Constant;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,7 +18,7 @@ public class Homescreenecom extends JFrame {
     public Homescreenecom() {
         // Set up the frame
         setTitle("E-Commerce Platform");
-        setSize(800, 600);
+        setSize(Constant.screenwidth, Constant.screenheight);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 

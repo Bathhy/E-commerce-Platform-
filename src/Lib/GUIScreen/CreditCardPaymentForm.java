@@ -1,4 +1,4 @@
-package ScreenOrder;
+package Lib.GUIScreen;
 import javax.swing.*;
 import java.awt.*;
 
