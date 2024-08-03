@@ -2,9 +2,14 @@ package Lib.GUIScreen;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class CartScreen extends JPanel {
-    public CartScreen() {
+    private JFrame parentFrame; // Reference to the parent JFrame
+
+    public CartScreen(JFrame parentFrame) {
+        this.parentFrame = parentFrame;
         setLayout(new BorderLayout());
 
         JPanel gridPanel = new JPanel(new GridLayout(0, 2, 10, 10));
@@ -27,16 +32,23 @@ public class CartScreen extends JPanel {
         // Create the bottom panel for total price and checkout button
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
 
-        JLabel totalPriceLabel = new JLabel("Total Price: $0.00"); //Total price
+        JLabel totalPriceLabel = new JLabel("Total Price: $0.00"); // Total price
         totalPriceLabel.setFont(new Font("Arial", Font.BOLD, 15));
         totalPriceLabel.setForeground(Color.BLUE);
         bottomPanel.add(totalPriceLabel);
 
-        //checkout button
+        // Checkout button
         JButton checkoutButton = new JButton("Checkout");
         checkoutButton.setFont(new Font("Arial", Font.BOLD, 15));
         checkoutButton.setForeground(Color.WHITE);
         checkoutButton.setBackground(Color.BLUE);
+        checkoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                parentFrame.dispose();
+                new CreditCardPaymentForm().setVisible(true);
+            }
+        });
         bottomPanel.add(checkoutButton);
 
         // Add the components to the CartScreen

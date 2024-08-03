@@ -6,8 +6,6 @@ import constant.Constant;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -25,10 +23,8 @@ public class LoginScreen extends JFrame  {
     private JLabel result;
     private JButton signupbutton;
     private JLabel asksignuplabel;
-    private boolean istogglepassword = false;
     Navigate nav = new Navigate(this);
     public LoginScreen() {
-        Constant mycont = new Constant();
         URL logourl;
         try {
             logourl = new URL(Constant.imgurl);
@@ -101,12 +97,33 @@ public class LoginScreen extends JFrame  {
         loginbutton.setBounds(150, 140, 100, 30);
         loginbutton.addActionListener(e -> {
             nav.navigateHome(e);
+//            try {
+//                String username = usertextField.getText();
+//                String password = String.valueOf(passwordField.getPassword());
+//                Connection con = MyDBConnection.getConnection();
+//                Statement stm = con.createStatement();
+//                String query = "SELECT * FROM customer WHERE username=? AND password=?";
+//                PreparedStatement pst = con.prepareStatement(query);
+//                pst.setString(1, username);
+//                pst.setString(2 , password);
+//                ResultSet resp = pst.executeQuery();
+//                if(resp.next()) {
+//                    UserModel.setUsername(resp.getString("username"));
+//                    UserModel.setPassword(resp.getString("password"));
+//                    AuthenticationState.setLogin(true);
+//                    nav.navigateHome(e);
+//                }else{
+//                    AuthenticationState.setLogin(false);
+//                   result.setText("Error Login Failed! Please try again");
+//                }
+//            }catch (SQLException exe){
+//                exe.printStackTrace();
+//                result.setText("Error Database Connection Failed");
+//            }
         });
         loginbutton.setForeground(Color.WHITE);
         loginbutton.setBackground(Color.BLUE);
-        loginbutton.addActionListener(e -> {
-            nav.navigateHome(e);
-        });
+
         rightPanel.add(loginbutton);
 
         asksignuplabel = new JLabel("Don't Have Account Yet?");
@@ -121,28 +138,14 @@ public class LoginScreen extends JFrame  {
             nav.navigateSignup(e);
         });
         rightPanel.add(signupbutton);
-
         result = new JLabel("");
         result.setBounds(50, 220, 300, 30);
         result.setForeground(Color.RED);
         rightPanel.add(result);
-
         // Add right panel to container
         container.add(rightPanel, BorderLayout.CENTER);
 
         setLocationRelativeTo(null);
         setVisible(true);
     }
-
-//    @Override
-//    public void actionPerformed(ActionEvent e) {
-////        String usernametextediting = usertextField.getText();
-////        String passwordtexttediting = new String(passwordField.getPassword());
-////        if (usernametextediting.isEmpty() && passwordtexttediting.isEmpty()) {
-////            result.setText("Please Enter your Username and Password");
-////        } else if (passwordtexttediting.length() < 8) {
-////            result.setText("Password must be 8 characters");
-////        }
-//    }
-
 }

@@ -1,19 +1,23 @@
-package ScreenOrder;
+package Lib.GUIScreen;
+
+import Navigator.Navigate;
+import constant.Constant;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class TableWithDetails {
-
-    public static void main(String[] args) {
+public class TableWithDetails extends  JFrame{
+    Navigate nav = new Navigate(this);
+    public TableWithDetails(){
         SwingUtilities.invokeLater(() -> {
             // Create the main frame
             JFrame frame = new JFrame("Order Details Table");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(800, 600);
+            frame.setSize(Constant.screenwidth, Constant.screenheight);
             frame.setLayout(new BorderLayout());
 
             // Set frame background color
@@ -116,8 +120,7 @@ public class TableWithDetails {
             continueShoppingButton.setBackground(Color.BLUE);
             continueShoppingButton.setForeground(Color.WHITE);
             continueShoppingButton.addActionListener(e -> {
-                // Handle button click
-                JOptionPane.showMessageDialog(frame, "Continue shopping clicked!");
+                nav.navigateHome(e);
             });
 
             // Create a panel for the button and add the button to the panel
