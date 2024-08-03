@@ -1,14 +1,17 @@
 package Lib.GUIScreen;
+import Navigator.Navigate;
+import constant.Constant;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class CreditCardPaymentForm {
-
-    public static void main(String[] args) {
+public class CreditCardPaymentForm extends JFrame{
+    Navigate nav = new Navigate(this);
+    public  CreditCardPaymentForm() {
         // Create the main frame
         JFrame frame = new JFrame("Credit Card Payment");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600); // Adjusted size to fit the new layout
+        frame.setSize(Constant.screenwidth, Constant.screenheight); // Adjusted size to fit the new layout
         frame.setLayout(new GridBagLayout());
 
         // Create a GridBagConstraints object for layout
@@ -140,7 +143,7 @@ public class CreditCardPaymentForm {
             String cvv = cvvField.getText();
             String month = monthField.getText();
             String year = yearField.getText();
-            
+
             // Print or process the payment details
             System.out.println("Confirm Payment button clicked");
             System.out.println("Owner: " + owner);
@@ -148,11 +151,12 @@ public class CreditCardPaymentForm {
             System.out.println("Card Number: " + cardNumber);
             System.out.println("CVV: " + cvv);
             System.out.println("Expiration Date: " + month + "/" + year);
-
+            nav.navigateOrderDetails(e);
             // Add any additional validation or processing logic here
         });
 
         // Display the frame
         frame.setVisible(true);
     }
+
 }

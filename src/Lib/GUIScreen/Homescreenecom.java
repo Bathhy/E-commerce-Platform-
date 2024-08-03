@@ -14,7 +14,6 @@ public class Homescreenecom extends JFrame {
     private ProfileScreen profileScreen;
     private CartScreen cartScreen;
     private JTextField searchField;
-
     public Homescreenecom() {
         // Set up the frame
         setTitle("E-Commerce Platform");
@@ -115,7 +114,7 @@ public class Homescreenecom extends JFrame {
 
         // Initialize profile and cart screens
         profileScreen = new ProfileScreen();
-        cartScreen = new CartScreen();
+        cartScreen = new CartScreen(this);
 
         // Add profile and cart screens to the contentPanel
         contentPanel.add(profileScreen, "Profile");
