@@ -1,14 +1,42 @@
 package Lib.GUIScreen;
 
 import Extension.Extension;
+import Model.ProfileModel;
+import Model.UserModel;
 import constant.Constant;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import Connection.MyDBConnection;
+import constant.Query;
+import state.AuthenticationState;
 
 public class ProfileScreen extends JPanel {
-
+    public void getProfile(){
+        try {
+            UserModel user= new UserModel();
+            Connection con = MyDBConnection.getConnection();
+            String query = Query.getprofilecustomer;
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setString(1 , user.getUsername());
+            ResultSet resp = pst.executeQuery();
+            if(resp.next()) {
+                ProfileModel.setUsername(resp.getString("username"));
+                ProfileModel.setPhonenumber(resp.getString("phone_number"));
+                ProfileModel.setEmail(resp.getString("email"));
+            }else{
+                System.out.println("No profile found");
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
     public ProfileScreen() {
+        getProfile();
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -21,13 +49,13 @@ public class ProfileScreen extends JPanel {
         iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Create labels
-        JLabel usernameLabel = new JLabel("Username: Leonard", SwingConstants.CENTER);
+        JLabel usernameLabel = new JLabel("Username: "+ProfileModel.getUsername(), SwingConstants.CENTER);
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 24));
 
-        JLabel emailLabel = new JLabel("Email: Leonard@gmail.com", SwingConstants.CENTER);
+        JLabel emailLabel = new JLabel("Email: "+ProfileModel.getEmail(), SwingConstants.CENTER);
         emailLabel.setFont(new Font("Arial", Font.BOLD, 24));
 
-        JLabel phoneNumLabel = new JLabel("Phone Number: 01233434", SwingConstants.CENTER);
+        JLabel phoneNumLabel = new JLabel("Phone Number: "+ProfileModel.getPhonenumber(), SwingConstants.CENTER);
         phoneNumLabel.setFont(new Font("Arial", Font.BOLD, 24));
 
         gbc.gridx = 0;
