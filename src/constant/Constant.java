@@ -10,3 +10,4 @@ public class Constant {
     public static int screenwidth = 800;
     public static int screenheight = 600;
 }
+

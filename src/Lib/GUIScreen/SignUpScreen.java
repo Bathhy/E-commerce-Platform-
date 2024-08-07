@@ -9,6 +9,12 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import Connection.MyDBConnection;
+import constant.Query;
 
 public class SignUpScreen extends JFrame{
     private Container container;
@@ -22,7 +28,7 @@ public class SignUpScreen extends JFrame{
     private JTextField usertextField;
     private JPasswordField passwordField;
     private JTextField emailTextField;
-    private JTextField phoneTextField;
+    private final JTextField phoneTextField;
     private JButton signbutton;
     private JButton loginbutton;
     private JLabel resLabel;
@@ -117,7 +123,33 @@ public class SignUpScreen extends JFrame{
         signbutton = new JButton("Sign Up");
         signbutton.setBounds(150, 220, 100, 30);
         signbutton.addActionListener(e -> {
-            nav.navigatelogin(e);
+
+            String username = usertextField.getText();
+            String password = passwordField.getText();
+            String email = emailTextField.getText();
+            String phone = phoneTextField.getText();
+            if(username.isEmpty() || password.isEmpty() || email.isEmpty() || phone.isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane, "Please fill all the fields");
+                return;
+            }
+            if(password.length() < 8){
+                JOptionPane.showMessageDialog(rootPane, "Password must be at least 8 characters");
+                return;
+            }
+            try {
+                Connection con =MyDBConnection.getConnection();
+                String query = Query.createcustomer;
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setString(1, username);
+                stmt.setString(2, password);
+                stmt.setString(3, email);
+                stmt.setString(4 , phone);
+                stmt.execute();
+                System.out.println("sign up save");
+                nav.navigatelogin(e);
+            }catch (SQLException e1){
+                e1.printStackTrace();
+            }
         });
         signbutton.setForeground(Color.WHITE);
         signbutton.setBackground(Color.BLUE);
