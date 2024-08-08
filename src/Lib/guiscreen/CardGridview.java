@@ -1,6 +1,7 @@
-package Lib.GUIScreen;
+package Lib.guiscreen;
 
 import constant.Constant;
+import model.ProductModel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -10,11 +11,12 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class CardGridview extends JPanel {
     private int quantity = 0;
 
-    public CardGridview(JButton actbutton) {
+    public CardGridview(JButton actbutton, ProductModel productModel) {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
         setPreferredSize(new Dimension(300, 150));
@@ -23,7 +25,7 @@ public class CardGridview extends JPanel {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(Color.WHITE);
 
-        JLabel productname = new JLabel("Nike Shoe");
+        JLabel productname = new JLabel(productModel.getProductname());
         topPanel.add(productname, BorderLayout.WEST);
 
         actbutton.setFont(new Font("Arial", Font.BOLD, 10));
@@ -60,17 +62,19 @@ public class CardGridview extends JPanel {
         JLabel sellername = new JLabel("Seller:Bruh");
         sellername.setForeground(Color.BLUE);
         controlsPanel.add(sellername);
-        JLabel quantityLabel = new JLabel("Quantity: " + quantity);
+        JLabel quantityLabel = new JLabel("Quantity: " + productModel.getQuantity());
         controlsPanel.add(quantityLabel);
 
         JButton removeButton = new JButton("-");
         removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (quantity > 0) {
-                    quantity--;
-                    quantityLabel.setText("Quantity: " + quantity);
-                }
+                productModel.decreaseQuantity();
+                quantityLabel.setText("Quantity: " + productModel.getQuantity());
+//                if (productModel.getQuantity() > 0) {
+//                    productModel.getQuantity();
+//                    quantityLabel.setText("Quantity: " + quantity);
+//                }
             }
         });
         controlsPanel.add(removeButton);
@@ -79,13 +83,13 @@ public class CardGridview extends JPanel {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                quantity++;
-                quantityLabel.setText("Quantity: " + quantity);
+                productModel.increaseQuantity();
+                quantityLabel.setText("Quantity: " + productModel.getQuantity());
             }
         });
         controlsPanel.add(addButton);
 
-        JLabel textLabel = new JLabel("$169.00");
+        JLabel textLabel = new JLabel("$ "+productModel.getPrice());
         controlsPanel.add(textLabel);
     }
 }

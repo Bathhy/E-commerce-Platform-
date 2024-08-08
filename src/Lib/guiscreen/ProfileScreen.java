@@ -1,8 +1,8 @@
-package Lib.GUIScreen;
+package Lib.guiscreen;
 
 import Extension.Extension;
-import Model.ProfileModel;
-import Model.UserModel;
+import model.ProfileModel;
+import model.UserModel;
 import constant.Constant;
 
 import javax.swing.*;
@@ -11,9 +11,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import Connection.MyDBConnection;
+import connection.MyDBConnection;
 import constant.Query;
-import state.AuthenticationState;
 
 public class ProfileScreen extends JPanel {
     public void getProfile(){

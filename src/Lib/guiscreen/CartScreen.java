@@ -1,4 +1,4 @@
-package Lib.GUIScreen;
+package Lib.guiscreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,9 +16,9 @@ public class CartScreen extends JPanel {
 
         // Add CardGridview components to the gridPanel
         JButton removeCartButton = new JButton("Remove Cart");
-        for (int i = 0; i < 10; i++) {
-            gridPanel.add(new CardGridview(new JButton(removeCartButton.getText())));
-        }
+//        for (int i = 0; i < 10; i++) {
+//            gridPanel.add(new CardGridview(new JButton(removeCartButton.getText())));
+//        }
 
         // Create a scroll pane to make the gridPanel scrollable
         JScrollPane scrollPane = new JScrollPane(gridPanel);
