@@ -1,4 +1,4 @@
-package Lib.GUIScreen;
+package Lib.guiscreen;
 
 import Navigator.Navigate;
 import constant.Constant;

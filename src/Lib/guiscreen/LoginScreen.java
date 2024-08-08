@@ -1,6 +1,6 @@
-package Lib.GUIScreen;
+package Lib.guiscreen;
 
-import Model.UserModel;
+import model.UserModel;
 import Navigator.Navigate;
 import constant.Constant;
 
@@ -12,7 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.*;
 
-import Connection.MyDBConnection;
+import connection.MyDBConnection;
 import constant.Query;
 import state.AuthenticationState;
 

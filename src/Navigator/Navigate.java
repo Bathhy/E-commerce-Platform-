@@ -1,9 +1,9 @@
 package Navigator;
 
-import Lib.GUIScreen.Homescreenecom;
-import Lib.GUIScreen.LoginScreen;
-import Lib.GUIScreen.SignUpScreen;
-import Lib.GUIScreen.TableWithDetails;
+import Lib.guiscreen.Homescreenecom;
+import Lib.guiscreen.LoginScreen;
+import Lib.guiscreen.SignUpScreen;
+import Lib.guiscreen.TableWithDetails;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

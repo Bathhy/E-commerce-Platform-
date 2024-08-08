@@ -1,4 +1,4 @@
-package Lib.GUIScreen;
+package Lib.guiscreen;
 
 import Navigator.Navigate;
 import constant.Constant;
@@ -11,9 +11,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import Connection.MyDBConnection;
+import connection.MyDBConnection;
 import constant.Query;
 
 public class SignUpScreen extends JFrame{

@@ -1,4 +1,4 @@
-import Lib.GUIScreen.LoginScreen;
+import Lib.guiscreen.LoginScreen;
 
 
 public class Main {

@@ -1,11 +1,22 @@
-package Lib.GUIScreen;
+package Lib.guiscreen;
 
+import connection.MyDBConnection;
 import constant.Constant;
+import constant.Query;
+import model.ProductModel;
+import model.ProfileModel;
+import model.UserModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Homescreenecom extends JFrame {
     private JPanel contentPanel;
@@ -14,8 +25,45 @@ public class Homescreenecom extends JFrame {
     private ProfileScreen profileScreen;
     private CartScreen cartScreen;
     private JTextField searchField;
+    List<ProductModel> product = new ArrayList<>();
+
+    public void getProduct() {
+
+        try {
+            Connection con = MyDBConnection.getConnection();
+            String query = Query.getproduct;
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet resp = pst.executeQuery();
+            while (resp.next()) {
+                System.out.println("Fetching data:");
+                System.out.println("Name: " + resp.getString("name"));
+                System.out.println("Price: " + resp.getDouble("price"));
+                System.out.println("Quantity: " + resp.getInt("quantity"));
+                System.out.println("Images: " + resp.getString("images"));
+                System.out.println("Seller ID: " + resp.getInt("seller_id"));
+                ProductModel prod = new ProductModel(
+                        resp.getString("name"),
+                        resp.getDouble("price"),
+                        resp.getInt("quantity"),
+                        resp.getString("images"),
+                        resp.getInt( "seller_id")
+
+                );
+                product.add(prod);
+
+            }
+            for (ProductModel prod : product) {
+                System.out.println("Product name: " + prod.getProductname());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Homescreenecom() {
+
         // Set up the frame
+        getProduct();
         setTitle("E-Commerce Platform");
         setSize(Constant.screenwidth, Constant.screenheight);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,9 +149,12 @@ public class Homescreenecom extends JFrame {
         homePanel = new JPanel(new BorderLayout());
         JPanel homeContentPanel = new JPanel();
         homeContentPanel.setLayout(new GridLayout(0, 3, 10, 10));
-        for (int i = 0; i < 9; i++) {
-            homeContentPanel.add(new CardGridview(new JButton("Add To Cart")));
+        for (ProductModel prod : product) {
+            homeContentPanel.add(new CardGridview(new JButton("Add to Cart"), prod));
         }
+//        for (ProductModel prod : product) {
+//            homeContentPanel.add(new CardGridview(new JButton("Add To Cart"),prod));
+//        }
         JScrollPane homeScrollPane = new JScrollPane(homeContentPanel);
 
         homePanel.add(searchPanel, BorderLayout.NORTH);
