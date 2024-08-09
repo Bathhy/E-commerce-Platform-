@@ -11,17 +11,14 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class CardGridview extends JPanel {
-    private int quantity = 0;
-
     public CardGridview(JButton actbutton, ProductModel productModel) {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
         setPreferredSize(new Dimension(300, 150));
 
-        // Panel for product name and add to cart button (top row)
+        // Top Panel for product name and add to cart button (top row)
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(Color.WHITE);
 
@@ -34,7 +31,7 @@ public class CardGridview extends JPanel {
 
         add(topPanel, BorderLayout.NORTH);
 
-        // Center panel for main content (boxPanel)
+        // Center Panel for the product image (boxPanel)
         JPanel boxPanel = new JPanel();
         boxPanel.setPreferredSize(new Dimension(200, 100));
 
@@ -55,15 +52,21 @@ public class CardGridview extends JPanel {
 
         add(boxPanel, BorderLayout.CENTER);
 
-        // Bottom panel for quantity controls and price label
+        // Bottom Panel for quantity controls and price label
         JPanel controlsPanel = new JPanel();
-        controlsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        add(controlsPanel, BorderLayout.SOUTH);
-        JLabel sellername = new JLabel("Seller:Bruh");
+        controlsPanel.setLayout(new BoxLayout(controlsPanel, BoxLayout.Y_AXIS));
+
+        JPanel firstRowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel sellername = new JLabel("Seller: " + productModel.getSellername());
         sellername.setForeground(Color.BLUE);
-        controlsPanel.add(sellername);
+        firstRowPanel.add(sellername);
+
         JLabel quantityLabel = new JLabel("Quantity: " + productModel.getQuantity());
-        controlsPanel.add(quantityLabel);
+        firstRowPanel.add(quantityLabel);
+
+        controlsPanel.add(firstRowPanel);
+
+        JPanel secondRowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         JButton removeButton = new JButton("-");
         removeButton.addActionListener(new ActionListener() {
@@ -71,13 +74,9 @@ public class CardGridview extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 productModel.decreaseQuantity();
                 quantityLabel.setText("Quantity: " + productModel.getQuantity());
-//                if (productModel.getQuantity() > 0) {
-//                    productModel.getQuantity();
-//                    quantityLabel.setText("Quantity: " + quantity);
-//                }
             }
         });
-        controlsPanel.add(removeButton);
+        secondRowPanel.add(removeButton);
 
         JButton addButton = new JButton("+");
         addButton.addActionListener(new ActionListener() {
@@ -87,9 +86,14 @@ public class CardGridview extends JPanel {
                 quantityLabel.setText("Quantity: " + productModel.getQuantity());
             }
         });
-        controlsPanel.add(addButton);
+        secondRowPanel.add(addButton);
 
-        JLabel textLabel = new JLabel("$ "+productModel.getPrice());
-        controlsPanel.add(textLabel);
+        JLabel priceLabel = new JLabel("$ " + productModel.getPrice());
+        secondRowPanel.add(priceLabel);
+
+        controlsPanel.add(secondRowPanel);
+
+        add(controlsPanel, BorderLayout.SOUTH);
     }
 }
+
