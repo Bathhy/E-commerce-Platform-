@@ -102,6 +102,10 @@ public class LoginScreen extends JFrame  {
         loginbutton = new JButton("Login");
         loginbutton.setBounds(150, 140, 100, 30);
         loginbutton.addActionListener(e -> {
+            if(usertextField.getText().isEmpty() || passwordField.getText().isEmpty() ) {
+                JOptionPane.showMessageDialog(rootPane, "Please fill all the fields");
+                return;
+            }
             try {
                 String username = usertextField.getText();
                 String password = String.valueOf(passwordField.getPassword());
