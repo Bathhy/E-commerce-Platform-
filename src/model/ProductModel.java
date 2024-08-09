@@ -1,7 +1,7 @@
 package model;
 
 public class ProductModel {
-    public ProductModel(String name, double price, int quantity, String imagePath, int sellerId) {
+    public ProductModel(String name, double price, int quantity, String imagePath, String sellerId) {
         this.productname = name;
         this.price = price;
         this.quantity = quantity;
@@ -41,7 +41,7 @@ public class ProductModel {
         this.productimages = productimages;
     }
 
-    public  int getSellername() {
+    public  String getSellername() {
         return sellername;
     }
     public void increaseQuantity(){
@@ -52,7 +52,7 @@ public class ProductModel {
             this.quantity--;
         }
     }
-    public  void setSellername(int sellername) {
+    public  void setSellername(String sellername) {
         this.sellername = sellername;
     }
 
@@ -60,5 +60,5 @@ public class ProductModel {
     private  double price;
     private  int quantity;
     private  String productimages;
-    private  int sellername;
+    private  String sellername;
 }
