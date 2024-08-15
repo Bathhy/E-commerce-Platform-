@@ -46,7 +46,7 @@ public class CartScreen extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 parentFrame.dispose();
-                new CreditCardPaymentForm().setVisible(true);
+                new CreditCardPaymentForm();
             }
         });
         bottomPanel.add(checkoutButton);

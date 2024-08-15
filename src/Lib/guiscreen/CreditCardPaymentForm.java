@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CreditCardPaymentForm extends JFrame{
-    Navigate nav = new Navigate(this);
+
     public  CreditCardPaymentForm() {
         // Create the main frame
         JFrame frame = new JFrame("Credit Card Payment");
@@ -133,7 +133,7 @@ public class CreditCardPaymentForm extends JFrame{
         confirmPaymentButton.setBackground(Color.BLUE);  // Set background color to blue
         confirmPaymentButton.setOpaque(true);            // Make sure background color is visible
         confirmPaymentButton.setBorderPainted(false);    // Remove the border
-
+        Navigate nav = new Navigate(frame);
         // Handle button clicks
         confirmPaymentButton.addActionListener(e -> {
             // Retrieve input values
