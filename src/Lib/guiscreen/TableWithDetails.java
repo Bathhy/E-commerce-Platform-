@@ -11,7 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class TableWithDetails extends  JFrame{
-    Navigate nav = new Navigate(this);
+
     public TableWithDetails(){
         SwingUtilities.invokeLater(() -> {
             // Create the main frame
@@ -114,14 +114,12 @@ public class TableWithDetails extends  JFrame{
                     }
                 }
             });
-
+            Navigate nav = new Navigate(frame);
             // Create the "Continue Shopping" button
             JButton continueShoppingButton = new JButton("Continue Shopping");
             continueShoppingButton.setBackground(Color.BLUE);
             continueShoppingButton.setForeground(Color.WHITE);
-            continueShoppingButton.addActionListener(e -> {
-                nav.navigateHome(e);
-            });
+            continueShoppingButton.addActionListener(nav::navigateHome);
 
             // Create a panel for the button and add the button to the panel
             JPanel buttonPanel = new JPanel();
