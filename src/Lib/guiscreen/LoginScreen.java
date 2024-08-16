@@ -1,7 +1,7 @@
 package Lib.guiscreen;
 
-import model.UserModel;
 import Navigator.Navigate;
+import model.UserModel;
 import constant.Constant;
 
 import javax.imageio.ImageIO;
