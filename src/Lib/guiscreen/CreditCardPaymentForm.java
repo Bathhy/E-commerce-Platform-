@@ -4,6 +4,8 @@ import constant.Constant;
 
 import javax.swing.*;
 import java.awt.*;
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
 
 public class CreditCardPaymentForm extends JFrame{
 
@@ -108,18 +110,11 @@ public class CreditCardPaymentForm extends JFrame{
         gbc.gridy = 7;
         frame.add(expirationLabel, gbc);
 
-        JPanel expirationPanel = new JPanel(new GridLayout(1, 2, 5, 5));
-        JTextField monthField = new JTextField();
-        JTextField yearField = new JTextField();
-        expirationPanel.add(new JLabel("Month:"));
-        expirationPanel.add(monthField);
-        expirationPanel.add(new JLabel("Year:"));
-        expirationPanel.add(yearField);
-
+        DatePicker datePicker = new DatePicker();
         gbc.gridx = 1;
         gbc.gridy = 7;
         gbc.gridwidth = 2;
-        frame.add(expirationPanel, gbc);
+        frame.add(datePicker, gbc);
 
         // Confirm Payment Button
         JButton confirmPaymentButton = new JButton("Confirm Payment");
@@ -141,8 +136,7 @@ public class CreditCardPaymentForm extends JFrame{
             String phone = phoneField.getText();
             String cardNumber = cardNumberField.getText();
             String cvv = cvvField.getText();
-            String month = monthField.getText();
-            String year = yearField.getText();
+            String DatePicker = datePicker.getText();
 
             // Print or process the payment details
             System.out.println("Confirm Payment button clicked");
@@ -150,7 +144,7 @@ public class CreditCardPaymentForm extends JFrame{
             System.out.println("Phone: " + phone);
             System.out.println("Card Number: " + cardNumber);
             System.out.println("CVV: " + cvv);
-            System.out.println("Expiration Date: " + month + "/" + year);
+            System.out.println("Expiration Date: " + expirationLabel);
             nav.navigateOrderDetails(e);
             // Add any additional validation or processing logic here
         });
