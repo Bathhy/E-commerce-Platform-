@@ -136,7 +136,7 @@ public class SignUpScreen extends JFrame{
                 return;
             }
             try {
-                Connection con =MyDBConnection.getConnection();
+                Connection con =MyDBConnection.getInstance().getConnection();
                 String query = Query.createcustomer;
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setString(1, username);

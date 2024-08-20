@@ -18,7 +18,7 @@ public class ProfileScreen extends JPanel {
     public void getProfile(){
         try {
             UserModel user= new UserModel();
-            Connection con = MyDBConnection.getConnection();
+            Connection con = MyDBConnection.getInstance().getConnection();
             String query = Query.getprofilecustomer;
             PreparedStatement pst = con.prepareStatement(query);
             pst.setString(1 , user.getUsername());
@@ -27,6 +27,7 @@ public class ProfileScreen extends JPanel {
                 ProfileModel.setUsername(resp.getString("username"));
                 ProfileModel.setPhonenumber(resp.getString("phone_number"));
                 ProfileModel.setEmail(resp.getString("email"));
+                ProfileModel.setCustomid(resp.getInt("customer_id"));
             }else{
                 System.out.println("No profile found");
             }

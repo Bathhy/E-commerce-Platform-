@@ -28,4 +28,13 @@ public class ProfileModel {
     private static String username;
     private static String email;
     private static String phonenumber;
+    private static int customid;
+
+    public static int getCustomid() {
+        return customid;
+    }
+
+    public static void setCustomid(int customid) {
+        ProfileModel.customid = customid;
+    }
 }
