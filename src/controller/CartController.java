@@ -1,12 +1,18 @@
 
 package controller;
+
 import constant.Query;
+import model.CartModel;
+import model.ProfileModel;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartController {
 
     private Connection con;
-
+    List<CartModel> carts = new ArrayList<CartModel>();
     public CartController(Connection con) {
         this.con = con;
     }
@@ -34,7 +40,7 @@ public class CartController {
         return -1;
     }
 
-    private int createCart(int customerId)  {
+    private int createCart(int customerId) {
         try (PreparedStatement pst = con.prepareStatement(Query.insertcart, Statement.RETURN_GENERATED_KEYS)) {
             pst.setInt(1, customerId);
             int rowsAffected = pst.executeUpdate();
@@ -48,7 +54,36 @@ public class CartController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return  -1;
+        return -1;
+    }
+
+    public void getCartInformation(List<CartModel> carts) {
+
+        try {
+            String query = Query.getcartinfo;
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setInt(1 , ProfileModel.getCustomid());
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                System.out.println("Fetching Cart data:");
+                System.out.println("Name: " + rs.getString("product_name"));
+                System.out.println("Price: " + rs.getDouble("product_price"));
+                System.out.println("Quantity: " + rs.getInt("Quantity"));
+                System.out.println("Images: " + rs.getString("cart_image"));
+                System.out.println("Seller ID: " + rs.getString("seller_name"));
+                System.out.println("total amount: " + rs.getDouble("total_amount"));
+                CartModel cartModel = new CartModel(rs.getString("product_name"),
+                        rs.getDouble("product_price"),
+                        rs.getString("cart_image"),
+                        rs.getString("seller_name"),
+                        rs.getInt("Quantity"),
+                        rs.getDouble("total_amount")
+                        );
+                carts.add(cartModel);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // Method to add item to cart
@@ -60,7 +95,9 @@ public class CartController {
                 pst.setInt(2, productId);
                 pst.setInt(3, qty);
                 int rowsAffected = pst.executeUpdate();
+                getCartInformation(carts);
                 return rowsAffected > 0;
+
             }
         } catch (SQLException e) {
             e.printStackTrace();

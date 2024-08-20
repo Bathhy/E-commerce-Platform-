@@ -50,9 +50,6 @@ public class Homescreenecom extends JFrame {
                 product.add(prod);
 
             }
-            for (ProductModel prod : product) {
-                System.out.println("Product name: " + prod.getProductname());
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

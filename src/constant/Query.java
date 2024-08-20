@@ -13,4 +13,19 @@ public class Query {
     public static String insertcart = "INSERT INTO cart(customer_id_fk)\n" +
             "VALUE(?)";
     public static String getcartid = "SELECT cart_id FROM cart WHERE cart.customer_id_fk = ?";
+    public static String getcartinfo = "SELECT \n" +
+            "\tp.name AS product_name,\n" +
+            "    p.price AS product_price,\n" +
+            "\ts.seller_name AS seller_name,\n" +
+            "    ci.qty AS Quantity,\n" +
+            "    p.images AS cart_image,\n" +
+            "    SUM(p.price * ci.qty) AS total_amount\n" +
+            "    FROM cart c\n" +
+            "    JOIN cart_item ci ON c.cart_id = ci.cart_id_fk\n" +
+            "    JOIN product p ON ci.product_id_fk = p.product_id\n" +
+            "    JOIN seller s ON p.seller_id = s.seller_id\n" +
+            "\n" +
+            " WHERE customer_id_fk= ?\n" +
+            " GROUP BY \n" +
+            "    p.name, p.price, s.seller_name, ci.qty, p.images;";
 }
