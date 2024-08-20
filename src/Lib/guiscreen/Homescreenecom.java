@@ -3,6 +3,7 @@ package Lib.guiscreen;
 import connection.MyDBConnection;
 import constant.Constant;
 import constant.Query;
+import controller.CartController;
 import model.ProductModel;
 import model.ProfileModel;
 import model.UserModel;
@@ -27,27 +28,25 @@ public class Homescreenecom extends JFrame {
     private JTextField searchField;
     List<ProductModel> product = new ArrayList<>();
 
+    Connection con = MyDBConnection.getInstance().getConnection();
+
     public void getProduct() {
 
         try {
-            Connection con = MyDBConnection.getConnection();
             String query = Query.getproduct;
             PreparedStatement pst = con.prepareStatement(query);
             ResultSet resp = pst.executeQuery();
             while (resp.next()) {
                 System.out.println("Fetching data:");
+                System.out.println("id " + resp.getInt("product_id"));
                 System.out.println("Name: " + resp.getString("name"));
                 System.out.println("Price: " + resp.getDouble("price"));
                 System.out.println("Quantity: " + resp.getInt("quantity"));
                 System.out.println("Images: " + resp.getString("images"));
                 System.out.println("Seller ID: " + resp.getString("seller_name"));
-                ProductModel prod = new ProductModel(
-                        resp.getString("name"),
-                        resp.getDouble("price"),
-                        resp.getInt("quantity"),
-                        resp.getString("images"),
-                        resp.getString("seller_name")
-                );
+                ProductModel prod = new ProductModel(resp.getString("name"), resp.getDouble("price"),
+                        resp.getInt("quantity"), resp.getString("images"),
+                        resp.getString("seller_name"), resp.getInt("product_id"));
                 product.add(prod);
 
             }
@@ -148,12 +147,24 @@ public class Homescreenecom extends JFrame {
         homePanel = new JPanel(new BorderLayout());
         JPanel homeContentPanel = new JPanel();
         homeContentPanel.setLayout(new GridLayout(0, 3, 10, 10));
+        CartController cartcontrol = new CartController(con);
         for (ProductModel prod : product) {
-            homeContentPanel.add(new CardGridview(new JButton("Add to Cart"), prod));
+            homeContentPanel.add(new CardGridview(new JButton("Add to Cart"), prod, e -> {
+                        int cartid = cartcontrol.getOrCreateCart(ProfileModel.getCustomid());
+                        if (cartid != -1) {
+                            boolean isadd = cartcontrol.addItemToCart(
+                                    cartid, prod.getProductid(), 10
+                            );
+                            if (isadd) {
+                                JOptionPane.showMessageDialog(this, "Product added to cart successfully!");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Failed to add product to cart.");
+                            }
+                        }
+                    }
+                    )
+            );
         }
-//        for (ProductModel prod : product) {
-//            homeContentPanel.add(new CardGridview(new JButton("Add To Cart"),prod));
-//        }
         JScrollPane homeScrollPane = new JScrollPane(homeContentPanel);
 
         homePanel.add(searchPanel, BorderLayout.NORTH);

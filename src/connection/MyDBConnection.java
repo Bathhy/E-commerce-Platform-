@@ -1,25 +1,33 @@
 package connection;
 
 import constant.Constant;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
 public class MyDBConnection {
-    public static Connection getConnection() {
-        Connection conn = null;
+
+    // This is the Singleton instance
+    private static MyDBConnection instance = null;
+    private Connection connection;
+
+    private MyDBConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(Constant.dburl, Constant.userdbname, Constant.userdbpass);
-        } catch (ClassNotFoundException e) {
-            System.err.println("JDBC Driver not found: " + e.getMessage());
-            e.printStackTrace();
-        } catch (SQLException e) {
-            System.err.println("Error establishing connection: " + e.getMessage());
+            connection = DriverManager.getConnection(Constant.dburl, Constant.userdbname, Constant.userdbpass);
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-        return conn;
+    }
+
+    // Thread-safe Singleton implementation using synchronized
+    public static synchronized MyDBConnection getInstance() {
+        if (instance == null) {
+            instance = new MyDBConnection();
+        }
+        return instance;
+    }
+    public Connection getConnection() {
+        return connection;
     }
 }

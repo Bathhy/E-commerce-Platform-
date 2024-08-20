@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class CardGridview extends JPanel {
-    public CardGridview(JButton actbutton, ProductModel productModel) {
+    public CardGridview(JButton actbutton, ProductModel productModel, ActionListener onclick) {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
         setPreferredSize(new Dimension(300, 150));
@@ -26,7 +26,8 @@ public class CardGridview extends JPanel {
         topPanel.add(productname, BorderLayout.WEST);
 
         actbutton.setFont(new Font("Arial", Font.BOLD, 10));
-        actbutton.setPreferredSize(new Dimension(100, 30)); // Set button size as needed
+        actbutton.setPreferredSize(new Dimension(100, 30));
+        actbutton.addActionListener(onclick);
         topPanel.add(actbutton, BorderLayout.EAST);
 
         add(topPanel, BorderLayout.NORTH);

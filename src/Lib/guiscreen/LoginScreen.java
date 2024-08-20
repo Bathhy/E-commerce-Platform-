@@ -1,6 +1,7 @@
 package Lib.guiscreen;
 
 import Navigator.Navigate;
+import controller.LoginController;
 import model.UserModel;
 import constant.Constant;
 
@@ -30,7 +31,9 @@ public class LoginScreen extends JFrame  {
     private JButton signupbutton;
     private JLabel asksignuplabel;
     Navigate nav = new Navigate(this);
+    LoginController loginController = new LoginController();
     public LoginScreen() {
+
         URL logourl;
         try {
             logourl = new URL(Constant.imgurl);
@@ -106,29 +109,38 @@ public class LoginScreen extends JFrame  {
                 JOptionPane.showMessageDialog(rootPane, "Please fill all the fields");
                 return;
             }
-            try {
-                String username = usertextField.getText();
+            String username = usertextField.getText();
                 String password = String.valueOf(passwordField.getPassword());
-                Connection con = MyDBConnection.getConnection();
-                Statement stm = con.createStatement();
-                String query = Query.getcustomer;
-                PreparedStatement pst = con.prepareStatement(query);
-                pst.setString(1, username);
-                pst.setString(2 , password);
-                ResultSet resp = pst.executeQuery();
-                if(resp.next()) {
-                    UserModel.setUsername(resp.getString("username"));
-                    UserModel.setPassword(resp.getString("password"));
-                    AuthenticationState.setLogin(true);
+                boolean islogin = loginController.loginUser(username, password);
+                if(islogin) {
                     nav.navigateHome(e);
                 }else{
                     AuthenticationState.setLogin(false);
                    result.setText("Error Login Failed! Please try again");
                 }
-            }catch (SQLException exe){
-                exe.printStackTrace();
-                result.setText("Error Database Connection Failed");
-            }
+//            try {
+//                String username = usertextField.getText();
+//                String password = String.valueOf(passwordField.getPassword());
+//                Connection con = MyDBConnection.getConnection();
+//                Statement stm = con.createStatement();
+//                String query = Query.getcustomer;
+//                PreparedStatement pst = con.prepareStatement(query);
+//                pst.setString(1, username);
+//                pst.setString(2 , password);
+//                ResultSet resp = pst.executeQuery();
+//                if(resp.next()) {
+//                    UserModel.setUsername(resp.getString("username"));
+//                    UserModel.setPassword(resp.getString("password"));
+//                    AuthenticationState.setLogin(true);
+//                    nav.navigateHome(e);
+//                }else{
+//                    AuthenticationState.setLogin(false);
+//                   result.setText("Error Login Failed! Please try again");
+//                }
+//            }catch (SQLException exe){
+//                exe.printStackTrace();
+//                result.setText("Error Database Connection Failed");
+//            }
         });
         loginbutton.setForeground(Color.WHITE);
         loginbutton.setBackground(Color.BLUE);

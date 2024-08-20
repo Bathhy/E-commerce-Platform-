@@ -1,7 +1,8 @@
 package model;
 
 public class ProductModel {
-    public ProductModel(String name, double price, int quantity, String imagePath, String sellerId) {
+    public ProductModel(String name, double price, int quantity, String imagePath, String sellerId, int productid) {
+        this.productid = productid;
         this.productname = name;
         this.price = price;
         this.quantity = quantity;
@@ -61,4 +62,13 @@ public class ProductModel {
     private  int quantity;
     private  String productimages;
     private  String sellername;
+    private int productid;
+
+    public int getProductid() {
+        return productid;
+    }
+
+    public void setProductid(int productid) {
+        this.productid = productid;
+    }
 }
