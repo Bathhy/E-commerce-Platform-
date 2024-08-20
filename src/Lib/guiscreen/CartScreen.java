@@ -1,25 +1,36 @@
 package Lib.guiscreen;
 
+import connection.MyDBConnection;
+import controller.CartController;
+import model.CartModel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartScreen extends JPanel {
     private JFrame parentFrame; // Reference to the parent JFrame
-
+    List<CartModel> cart = new ArrayList<>();
+    Connection con = MyDBConnection.getInstance().getConnection();
+    CartController cartController = new CartController(con);
     public CartScreen(JFrame parentFrame) {
         this.parentFrame = parentFrame;
         setLayout(new BorderLayout());
-
+        cartController.getCartInformation(cart);
         JPanel gridPanel = new JPanel(new GridLayout(0, 2, 10, 10));
 
         // Add CardGridview components to the gridPanel
         JButton removeCartButton = new JButton("Remove Cart");
-//        for (int i = 0; i < 10; i++) {
-//            gridPanel.add(new CardGridview(new JButton(removeCartButton.getText())));
-//        }
 
+        for(CartModel cartdata : cart) {
+            gridPanel.add(new CardGridview(removeCartButton, cartdata, e -> {
+
+            }));
+        }
         // Create a scroll pane to make the gridPanel scrollable
         JScrollPane scrollPane = new JScrollPane(gridPanel);
 

@@ -1,6 +1,6 @@
 package model;
 
-public class ProductModel {
+public class ProductModel   {
     public ProductModel(String name, double price, int quantity, String imagePath, String sellerId, int productid) {
         this.productid = productid;
         this.productname = name;
@@ -18,8 +18,20 @@ public class ProductModel {
         this.productname = productname;
     }
 
+    public String getProductName() {
+        return productname;
+    }
+
     public  double getPrice() {
         return price;
+    }
+
+    public String getProductImage() {
+        return productimages;
+    }
+
+    public String getSellerName() {
+        return sellername;
     }
 
     public  void setPrice(double price) {
@@ -34,17 +46,10 @@ public class ProductModel {
         this.quantity = quantity;
     }
 
-    public  String getProductimages() {
-        return productimages;
-    }
-
     public  void setProductimages(String productimages) {
         this.productimages = productimages;
     }
 
-    public  String getSellername() {
-        return sellername;
-    }
     public void increaseQuantity(){
         this.quantity++;
     }
