@@ -45,7 +45,7 @@ public class Homescreenecom extends JFrame {
                 System.out.println("Images: " + resp.getString("images"));
                 System.out.println("Seller ID: " + resp.getString("seller_name"));
                 ProductModel prod = new ProductModel(resp.getString("name"), resp.getDouble("price"),
-                        resp.getInt("quantity"), resp.getString("images"),
+                       resp.getString("images"),
                         resp.getString("seller_name"), resp.getInt("product_id"));
                 product.add(prod);
 
@@ -93,6 +93,8 @@ public class Homescreenecom extends JFrame {
         // Add action listeners to the buttons
         cartButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+                cartScreen.refreshCartUI();
                 showPanel("My Cart");
             }
         });
@@ -150,7 +152,7 @@ public class Homescreenecom extends JFrame {
                         int cartid = cartcontrol.getOrCreateCart(ProfileModel.getCustomid());
                         if (cartid != -1) {
                             boolean isadd = cartcontrol.addItemToCart(
-                                    cartid, prod.getProductid(), 10
+                                    cartid, prod.getProductid(), prod.getQuantity()
                             );
                             if (isadd) {
                                 JOptionPane.showMessageDialog(this, "Product added to cart successfully!");

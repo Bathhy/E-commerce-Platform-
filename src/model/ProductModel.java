@@ -1,14 +1,14 @@
 package model;
 
 public class ProductModel   {
-    public ProductModel(String name, double price, int quantity, String imagePath, String sellerId, int productid) {
+    public ProductModel(String name, double price, String imagePath, String sellerId, int productid) {
         this.productid = productid;
         this.productname = name;
         this.price = price;
-        this.quantity = quantity;
         this.productimages = imagePath;
         this.sellername = sellerId;
     }
+
 
     public  String getProductname() {
         return productname;

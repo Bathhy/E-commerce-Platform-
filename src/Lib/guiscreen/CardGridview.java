@@ -1,6 +1,5 @@
 package Lib.guiscreen;
 
-import constant.Constant;
 import model.CartModel;
 import model.ProductModel;
 
@@ -11,19 +10,24 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CardGridview extends JPanel {
+
+
+    private int quantity = 0;
+
     public CardGridview(JButton actionButton, Object model, ActionListener onClick) {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
         setPreferredSize(new Dimension(300, 150));
-
         // Determine model type
         String productName = "";
         double price = 0;
         String productImage = "";
         String sellerName = "";
-        int quantity = 0;
+
 
         if (model instanceof CartModel) {
             CartModel cartModel = (CartModel) model;
@@ -40,7 +44,12 @@ public class CardGridview extends JPanel {
             sellerName = productModel.getSellerName();
             quantity = productModel.getQuantity();
         }
-
+        ProductModel productModel;
+        if (model instanceof ProductModel) {
+            productModel = (ProductModel) model;
+        } else {
+            productModel = null;
+        }
         // Top Panel for product name and action button (top row)
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(Color.WHITE);
@@ -62,16 +71,27 @@ public class CardGridview extends JPanel {
         // Load and scale the image
         BufferedImage originalImage = null;
         try {
-            originalImage = ImageIO.read(new File(Constant.fakeimage));
+            // Check if the productImage is a URL or a local path
+            if (productImage.startsWith("http://") || productImage.startsWith("https://")) {
+                // Load image from URL
+                URL imageUrl = new URL(productImage);
+                originalImage = ImageIO.read(imageUrl);
+            } else {
+                // Load image from local file path
+                File imageFile = new File(productImage);
+                originalImage = ImageIO.read(imageFile);
+            }
         } catch (IOException e) {
+            System.err.println("Error reading the image file: " + e.getMessage());
             e.printStackTrace();
         }
-
         if (originalImage != null) {
-            Image scaledImage = originalImage.getScaledInstance(200, 100, Image.SCALE_AREA_AVERAGING);
+            Image scaledImage = originalImage.getScaledInstance(200, 100, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaledImage);
             JLabel iconLabel = new JLabel(scaledIcon);
             boxPanel.add(iconLabel);
+        } else {
+            boxPanel.add(new JLabel("Image could not be read."));
         }
 
         add(boxPanel, BorderLayout.CENTER);
@@ -85,7 +105,7 @@ public class CardGridview extends JPanel {
         sellerNameLabel.setForeground(Color.BLUE);
         firstRowPanel.add(sellerNameLabel);
 
-        JLabel quantityLabel = new JLabel("Quantity: " + quantity);
+        JLabel quantityLabel = new JLabel("Quantity: " + quantity );
         firstRowPanel.add(quantityLabel);
 
         controlsPanel.add(firstRowPanel);
@@ -94,13 +114,15 @@ public class CardGridview extends JPanel {
 
         JButton removeButton = new JButton("-");
         removeButton.addActionListener(e -> {
-            // Handle decrease quantity action here
+            productModel.decreaseQuantity();
+            quantityLabel.setText("Quantity: " + productModel.getQuantity());
         });
         secondRowPanel.add(removeButton);
 
         JButton addButton = new JButton("+");
         addButton.addActionListener(e -> {
-            // Handle increase quantity action here
+            productModel.increaseQuantity();
+            quantityLabel.setText("Quantity: " + productModel.getQuantity());
         });
         secondRowPanel.add(addButton);
 
