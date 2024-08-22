@@ -1,15 +1,17 @@
 package model;
 
 public class CartModel   {
-
-
-    public CartModel( String productname,double price, String productimages, String sellername,int quantity, double total) {
+    public CartModel(int prodid, String productname,double price, String productimages, String sellername,int quantity,
+                     double total, int cartid, double totalamount) {
+        this.productid = prodid;
         this.quantity = quantity;
         this.total = total;
         this.price = price;
         this.productname = productname;
         this.productimages = productimages;
         this.sellername = sellername;
+        this.cartid = cartid;
+        this.totalcart_amount = totalamount;
     }
 
 
@@ -24,8 +26,6 @@ public class CartModel   {
     public void setTotal(double total) {
         this.total = total;
     }
-
-
 
     public void setPrice(double price) {
         this.price = price;
@@ -59,6 +59,23 @@ public class CartModel   {
     private  String productname;
     private  String productimages;
     private  String sellername;
+    private int cartid;
+    private int productid;
+    private double totalcart_amount;
+
+    public double getTotalcart_amount() {
+        return totalcart_amount;
+    }
+
+    public int getProductid() {
+        return productid;
+    }
+
+    public int getCartid() {
+        return cartid;
+    }
+
+
 
     public String getProductName() {
         return productname;

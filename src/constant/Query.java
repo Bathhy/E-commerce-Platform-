@@ -13,19 +13,32 @@ public class Query {
     public static String insertcart = "INSERT INTO cart(customer_id_fk)\n" +
             "VALUE(?)";
     public static String getcartid = "SELECT cart_id FROM cart WHERE cart.customer_id_fk = ?";
-    public static String getcartinfo = "SELECT \n" +
-            "\tp.name AS product_name,\n" +
-            "    p.price AS product_price,\n" +
-            "\ts.seller_name AS seller_name,\n" +
-            "    ci.qty AS Quantity,\n" +
-            "    p.images AS cart_image,\n" +
-            "    SUM(p.price * ci.qty) AS total_amount\n" +
+    public static String getcartinfo ="WITH CartTotals AS (\n" +
+            "    SELECT \n" +
+            "        c.cart_id,\n" +
+            "        SUM(p.price * ci.qty) AS total_cart_amount\n" +
             "    FROM cart c\n" +
             "    JOIN cart_item ci ON c.cart_id = ci.cart_id_fk\n" +
             "    JOIN product p ON ci.product_id_fk = p.product_id\n" +
-            "    JOIN seller s ON p.seller_id = s.seller_id\n" +
+            "    WHERE c.customer_id_fk = ?\n" +
+            "    GROUP BY c.cart_id\n" +
+            ")\n" +
             "\n" +
-            " WHERE customer_id_fk= ?\n" +
-            " GROUP BY \n" +
-            "    p.name, p.price, s.seller_name, ci.qty, p.images;";
+            "SELECT \n" +
+            "    c.cart_id AS cart_id,\n" +
+            "    p.product_id AS product_id,\n" +
+            "    p.name AS product_name,\n" +
+            "    p.price AS product_price,\n" +
+            "    s.seller_name AS seller_name,\n" +
+            "    ci.qty AS quantity,\n" +
+            "    p.images AS cart_image,\n" +
+            "    (p.price * ci.qty) AS total_amount,\n" +
+            "    ct.total_cart_amount\n" +
+            "FROM cart c\n" +
+            "JOIN cart_item ci ON c.cart_id = ci.cart_id_fk\n" +
+            "JOIN product p ON ci.product_id_fk = p.product_id\n" +
+            "JOIN seller s ON p.seller_id = s.seller_id\n" +
+            "JOIN CartTotals ct ON c.cart_id = ct.cart_id\n" +
+            "WHERE c.customer_id_fk = ?;";
+    public static String removecart = "DELETE FROM cart_item WHERE cart_item.cart_id_fk=? AND cart_item.product_id_fk=?";
 }

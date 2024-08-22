@@ -4,7 +4,6 @@ package controller;
 import constant.Query;
 import model.CartModel;
 import model.ProfileModel;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +57,11 @@ public class CartController {
     }
 
     public void getCartInformation(List<CartModel> carts) {
-
         try {
             String query = Query.getcartinfo;
             PreparedStatement pst = con.prepareStatement(query);
             pst.setInt(1 , ProfileModel.getCustomid());
+            pst.setInt(2 , ProfileModel.getCustomid());
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 System.out.println("Fetching Cart data:");
@@ -72,12 +71,16 @@ public class CartController {
                 System.out.println("Images: " + rs.getString("cart_image"));
                 System.out.println("Seller ID: " + rs.getString("seller_name"));
                 System.out.println("total amount: " + rs.getDouble("total_amount"));
-                CartModel cartModel = new CartModel(rs.getString("product_name"),
+                CartModel cartModel = new CartModel(
+                        rs.getInt("product_id"),
+                        rs.getString("product_name"),
                         rs.getDouble("product_price"),
                         rs.getString("cart_image"),
                         rs.getString("seller_name"),
                         rs.getInt("Quantity"),
-                        rs.getDouble("total_amount")
+                        rs.getDouble("total_amount"),
+                        rs.getInt("cart_id"),
+                        rs.getDouble("total_cart_amount")
                         );
                 carts.add(cartModel);
             }
@@ -95,13 +98,33 @@ public class CartController {
                 pst.setInt(2, productId);
                 pst.setInt(3, qty);
                 int rowsAffected = pst.executeUpdate();
-                getCartInformation(carts);
-                return rowsAffected > 0;
-
+                if( rowsAffected > 0){
+                    getCartInformation(carts);
+                    return true;
+                }
             }
+            getCartInformation(carts);
         } catch (SQLException e) {
             e.printStackTrace();
-
+        }
+        return false;
+    }
+    public boolean removeItemCart(int cartid, int productId){
+        try{
+            PreparedStatement pst = con.prepareStatement(Query.removecart);
+            pst.setInt(1, cartid);
+            pst.setInt(2, productId);
+            int rowsAffected = pst.executeUpdate();
+            System.out.println("what is cartid:"+cartid);
+            System.out.println("what is prodid:"+productId);
+            getCartInformation(carts);
+            if (rowsAffected > 0) {
+                getCartInformation(carts);
+                return true;
+            }
+            getCartInformation(carts);
+        }catch (SQLException e ){
+            e.printStackTrace();
         }
         return false;
     }
