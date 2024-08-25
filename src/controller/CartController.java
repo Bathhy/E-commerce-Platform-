@@ -93,18 +93,46 @@ public class CartController {
     public boolean addItemToCart(int customerId, int productId, int qty) {
         try {
             int cartId = getOrCreateCart(customerId);
-            try (PreparedStatement pst = con.prepareStatement(Query.addtocartitem)) {
-                pst.setInt(1, cartId);
-                pst.setInt(2, productId);
-                pst.setInt(3, qty);
-                int rowsAffected = pst.executeUpdate();
-                if( rowsAffected > 0){
-                    getCartInformation(carts);
-                    return true;
+            if(checkItemExist(cartId, productId)){
+               try(PreparedStatement pst = con.prepareStatement(Query.update_cart_item)){
+                    pst.setInt(1, qty);
+                   pst.setInt(2, cartId);
+                   pst.setInt(3, productId);
+                   int rowsAffected = pst.executeUpdate();
+                   if (rowsAffected > 0) {
+                       getCartInformation(carts);
+                       return true;
+                   }
+               }
+            }else{
+                try (PreparedStatement pst = con.prepareStatement(Query.addtocartitem)) {
+                    pst.setInt(1, cartId);
+                    pst.setInt(2, productId);
+                    pst.setInt(3, qty);
+                    int rowsAffected = pst.executeUpdate();
+                    if( rowsAffected > 0){
+                        getCartInformation(carts);
+                        return true;
+                    }
                 }
             }
-            getCartInformation(carts);
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    private void updateCartTotalPrice(){}
+    private Boolean checkItemExist(int cartid , int productId){
+        try{
+            PreparedStatement pst = con.prepareStatement(Query.CHECK_CART_ITEM_EXIST);
+            pst.setInt(1, cartid);
+            pst.setInt(2, productId);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }catch (SQLException e){
             e.printStackTrace();
         }
         return false;

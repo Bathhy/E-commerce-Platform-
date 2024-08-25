@@ -40,5 +40,13 @@ public class Query {
             "JOIN seller s ON p.seller_id = s.seller_id\n" +
             "JOIN CartTotals ct ON c.cart_id = ct.cart_id\n" +
             "WHERE c.customer_id_fk = ?;";
+    public static String CHECK_CART_ITEM_EXIST = "SELECT * FROM cart_item WHERE cart_id_fk = ? AND product_id_fk =?;";
+    public static String update_cart_item = "UPDATE cart_item SET qty = qty + ? WHERE cart_id_fk = ? AND product_id_fk = ?;";
     public static String removecart = "DELETE FROM cart_item WHERE cart_item.cart_id_fk=? AND cart_item.product_id_fk=?";
+    public static String UPDATE_CART_TOTAL = "UPDATE cart c SET c.total_cart_amount = (\n" +
+            "    SELECT SUM(p.price * ci.qty) \n" +
+            "    FROM cart_item ci \n" +
+            "    JOIN product p ON ci.product_id_fk = p.product_id \n" +
+            "    WHERE ci.cart_id_fk = ?\n" +
+            ") WHERE c.cart_id = ?;";
 }
