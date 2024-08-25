@@ -21,6 +21,7 @@ public class CartScreen extends JPanel {
     private Connection con = MyDBConnection.getInstance().getConnection();
     private CartController cartController = new CartController(con);
     private JPanel gridPanel;
+    private JLabel totalPriceLabel = new JLabel();
 
     public CartScreen(JFrame parentFrame) {
         this.parentFrame = parentFrame;
@@ -30,7 +31,7 @@ public class CartScreen extends JPanel {
 
     private void initializeCartScreen() {
         gridPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        refreshCartUI();  // Initial population of grid panel
+        refreshCartUI();
 
         JScrollPane scrollPane = new JScrollPane(gridPanel);
 
@@ -38,9 +39,10 @@ public class CartScreen extends JPanel {
         cartLabel.setFont(new Font("Arial", Font.BOLD, 24));
         cartLabel.setForeground(Color.BLUE);
         cartLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
+        String totalprice;
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
-        JLabel totalPriceLabel = new JLabel("Total Price: $"+cart.getFirst().getTotalcart_amount());
+
+
         totalPriceLabel.setFont(new Font("Arial", Font.BOLD, 15));
         totalPriceLabel.setForeground(Color.BLUE);
         bottomPanel.add(totalPriceLabel);
@@ -67,6 +69,7 @@ public class CartScreen extends JPanel {
         gridPanel.removeAll();
         cart.clear();
         cartController.getCartInformation(cart);
+        double totalPrice = 0.0;
         for (CartModel cartData : cart) {
             gridPanel.add(new CardGridview(new JButton("Remove Cart"), cartData, e -> {
                 boolean removeCart = cartController.removeItemCart(cartData.getCartid(), cartData.getProductid());
@@ -79,7 +82,9 @@ public class CartScreen extends JPanel {
                     JOptionPane.showMessageDialog(this, "Failed to remove product.");
                 }
             }));
+            totalPrice =cartData.getTotalcart_amount();
         }
+        totalPriceLabel.setText("Total Price: $" + totalPrice);
         revalidate();
         repaint();
     }

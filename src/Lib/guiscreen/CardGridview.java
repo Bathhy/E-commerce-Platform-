@@ -71,20 +71,18 @@ public class CardGridview extends JPanel {
         // Load and scale the image
         BufferedImage originalImage = null;
         try {
-            // Check if the productImage is a URL or a local path
-            if (productImage.startsWith("http://") || productImage.startsWith("https://")) {
-                // Load image from URL
-                URL imageUrl = new URL(productImage);
-                originalImage = ImageIO.read(imageUrl);
-            } else {
-                // Load image from local file path
-                File imageFile = new File(productImage);
+//            String formattedPath = productImage.replace("\\", "/");
+            File imageFile = new File(productImage);
+
+            if (imageFile.exists()) {
                 originalImage = ImageIO.read(imageFile);
+            } else {
+                System.err.println("Image file not found: " + productImage);
             }
         } catch (IOException e) {
             System.err.println("Error reading the image file: " + e.getMessage());
-            e.printStackTrace();
         }
+
         if (originalImage != null) {
             Image scaledImage = originalImage.getScaledInstance(200, 100, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -93,6 +91,7 @@ public class CardGridview extends JPanel {
         } else {
             boxPanel.add(new JLabel("Image could not be read."));
         }
+
 
         add(boxPanel, BorderLayout.CENTER);
 
