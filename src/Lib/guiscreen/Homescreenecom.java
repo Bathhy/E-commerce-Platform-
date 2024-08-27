@@ -1,12 +1,14 @@
 package Lib.guiscreen;
 
+import Lib.guiscreen.CardGridview;
+import Lib.guiscreen.CartScreen;
+import Lib.guiscreen.ProfileScreen;
 import connection.MyDBConnection;
 import constant.Constant;
 import constant.Query;
 import controller.CartController;
 import model.ProductModel;
 import model.ProfileModel;
-import model.UserModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,12 +28,14 @@ public class Homescreenecom extends JFrame {
     private ProfileScreen profileScreen;
     private CartScreen cartScreen;
     private JTextField searchField;
-    List<ProductModel> product = new ArrayList<>();
+    private List<ProductModel> product = new ArrayList<>();
+    private List<ProductModel> filteredProducts = new ArrayList<>();
+    private JPanel homeContentPanel;
+    private CartController cartcontrol;
 
     Connection con = MyDBConnection.getInstance().getConnection();
 
     public void getProduct() {
-
         try {
             String query = Query.getproduct;
             PreparedStatement pst = con.prepareStatement(query);
@@ -45,11 +49,11 @@ public class Homescreenecom extends JFrame {
                 System.out.println("Images: " + resp.getString("images"));
                 System.out.println("Seller ID: " + resp.getString("seller_name"));
                 ProductModel prod = new ProductModel(resp.getString("name"), resp.getDouble("price"),
-                       resp.getString("images"),
+                        resp.getString("images"),
                         resp.getString("seller_name"), resp.getInt("product_id"));
                 product.add(prod);
-
             }
+            filteredProducts.addAll(product); // Initially, display all products
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -118,13 +122,14 @@ public class Homescreenecom extends JFrame {
 
         // Create the search panel
         searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        searchField = new JTextField("Search...");
+        searchField = new JTextField();
         searchField.setPreferredSize(new Dimension(200, 30));
         searchField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String query = searchField.getText();
                 System.out.println("Searching for: " + query);
+                performSearch(query);
             }
         });
         searchPanel.add(searchField);
@@ -135,6 +140,7 @@ public class Homescreenecom extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String query = searchField.getText();
                 System.out.println("Searching for: " + query);
+                performSearch(query);
             }
         });
         searchPanel.add(searchButton);
@@ -144,26 +150,11 @@ public class Homescreenecom extends JFrame {
 
         // Create and add the home panel with scroll pane
         homePanel = new JPanel(new BorderLayout());
-        JPanel homeContentPanel = new JPanel();
+        homeContentPanel = new JPanel();
         homeContentPanel.setLayout(new GridLayout(0, 3, 10, 10));
-        CartController cartcontrol = new CartController(con);
-        for (ProductModel prod : product) {
-            homeContentPanel.add(new CardGridview(new JButton("Add to Cart"), prod, e -> {
-                        int cartid = cartcontrol.getOrCreateCart(ProfileModel.getCustomid());
-                        if (cartid != -1) {
-                            boolean isadd = cartcontrol.addItemToCart(
-                                    cartid, prod.getProductid(), prod.getQuantity()
-                            );
-                            if (isadd) {
-                                JOptionPane.showMessageDialog(this, "Product added to cart successfully!");
-                            } else {
-                                JOptionPane.showMessageDialog(this, "Failed to add product to cart.");
-                            }
-                        }
-                    }
-                    )
-            );
-        }
+        cartcontrol = new CartController(con);
+        displayProducts(filteredProducts); // Display initial products
+
         JScrollPane homeScrollPane = new JScrollPane(homeContentPanel);
 
         homePanel.add(searchPanel, BorderLayout.NORTH);
@@ -198,5 +189,43 @@ public class Homescreenecom extends JFrame {
     private void showPanel(String panelName) {
         CardLayout cardLayout = (CardLayout) contentPanel.getLayout();
         cardLayout.show(contentPanel, panelName);
+    }
+
+    private void performSearch(String query) {
+        filteredProducts.clear();
+        for (ProductModel prod : product) {
+            if (prod.getName().toLowerCase().contains(query.toLowerCase())) {
+                filteredProducts.add(prod);
+            }
+        }
+        displayProducts(filteredProducts);
+    }
+
+    private void displayProducts(List<ProductModel> productsToDisplay) {
+        homeContentPanel.removeAll(); // Clear the existing products
+
+        for (ProductModel prod : productsToDisplay) {
+            homeContentPanel.add(new CardGridview(new JButton("Add to Cart"), prod, e -> {
+                int cartid = cartcontrol.getOrCreateCart(ProfileModel.getCustomid());
+                if (cartid != -1) {
+                    boolean isadd = cartcontrol.addItemToCart(
+                            cartid, prod.getProductid(), prod.getQuantity()
+                    );
+                    if (isadd) {
+                        JOptionPane.showMessageDialog(this, "Product added to cart successfully!");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Failed to add product to cart.");
+                    }
+                }
+            }
+            ));
+        }
+
+        homeContentPanel.revalidate();
+        homeContentPanel.repaint();
+    }
+
+    public static void main(String[] args) {
+        new Homescreenecom();
     }
 }

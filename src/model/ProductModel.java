@@ -76,4 +76,8 @@ public class ProductModel   {
     public void setProductid(int productid) {
         this.productid = productid;
     }
+
+    public String getName() {
+        return productname;
+    }
 }
