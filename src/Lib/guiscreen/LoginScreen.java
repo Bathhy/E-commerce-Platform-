@@ -2,6 +2,7 @@ package Lib.guiscreen;
 
 import Navigator.Navigate;
 import controller.LoginController;
+import model.ProfileModel;
 import model.UserModel;
 import constant.Constant;
 
@@ -33,7 +34,6 @@ public class LoginScreen extends JFrame  {
     Navigate nav = new Navigate(this);
     LoginController loginController = new LoginController();
     public LoginScreen() {
-
         URL logourl;
         try {
             logourl = new URL(Constant.imgurl);
@@ -104,8 +104,8 @@ public class LoginScreen extends JFrame  {
 
         loginbutton = new JButton("Login");
         loginbutton.setBounds(150, 140, 100, 30);
-        usertextField.setText("Bake");
-        passwordField.setText("1290");
+        usertextField.setText("ankaramessi");
+        passwordField.setText("ankara1234");
         loginbutton.addActionListener(e -> {
             if(usertextField.getText().isEmpty() || passwordField.getText().isEmpty() ) {
                 JOptionPane.showMessageDialog(rootPane, "Please fill all the fields");
@@ -121,29 +121,7 @@ public class LoginScreen extends JFrame  {
                     AuthenticationState.setLogin(false);
                    result.setText("Error Login Failed! Please try again");
                 }
-//            try {
-//                String username = usertextField.getText();
-//                String password = String.valueOf(passwordField.getPassword());
-//                Connection con = MyDBConnection.getConnection();
-//                Statement stm = con.createStatement();
-//                String query = Query.getcustomer;
-//                PreparedStatement pst = con.prepareStatement(query);
-//                pst.setString(1, username);
-//                pst.setString(2 , password);
-//                ResultSet resp = pst.executeQuery();
-//                if(resp.next()) {
-//                    UserModel.setUsername(resp.getString("username"));
-//                    UserModel.setPassword(resp.getString("password"));
-//                    AuthenticationState.setLogin(true);
-//                    nav.navigateHome(e);
-//                }else{
-//                    AuthenticationState.setLogin(false);
-//                   result.setText("Error Login Failed! Please try again");
-//                }
-//            }catch (SQLException exe){
-//                exe.printStackTrace();
-//                result.setText("Error Database Connection Failed");
-//            }
+
         });
         loginbutton.setForeground(Color.WHITE);
         loginbutton.setBackground(Color.BLUE);

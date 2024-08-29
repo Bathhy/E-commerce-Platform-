@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CartScreen extends JPanel {
@@ -50,12 +51,44 @@ public class CartScreen extends JPanel {
         JButton checkoutButton = new JButton("Checkout");
         checkoutButton.setFont(new Font("Arial", Font.BOLD, 15));
         checkoutButton.setForeground(Color.WHITE);
-        checkoutButton.setBackground(Color.BLUE);
+
+        Date orderDate = new Date();
+
         checkoutButton.addActionListener(new ActionListener() {
+
+
             @Override
             public void actionPerformed(ActionEvent e) {
-                parentFrame.dispose();
-                new CreditCardPaymentForm();
+                                    new CreditCardPaymentForm();
+                    parentFrame.dispose();
+
+//                if (cart.isEmpty()) {
+//                    JOptionPane.showMessageDialog(parentFrame, "Your cart is empty. Please add items to proceed with checkout.");
+//                    return;
+//                }
+//                CartModel firstCartItem = cart.get(0);
+//                int cartId = firstCartItem.getCartid();
+//
+//                if (cartId == -1) {
+//                    System.out.println("Invalid cart ID. Cannot proceed with order creation.");
+//                    return;
+//                }
+
+//                 int orderId = cartController.createOrder(cartId, ProfileModel.getCustomid(),
+//                        new java.sql.Date(orderDate.getTime()));
+//                if(orderId != -1){
+//                    for (CartModel cartItem : cart) {
+//                        boolean orderItemCreated = cartController.createOrderItem(orderId,
+//                                cartItem.getProductid(),
+//                                cartItem.getQuantity(),
+//                                cartItem.getPrice());
+//                        if (!orderItemCreated) {
+//                            System.out.println("Failed to create order item for product ID: " + cartItem.getProductid());
+//                            return;
+//                        }
+//                    }
+
+//                }
             }
         });
         bottomPanel.add(checkoutButton);
@@ -82,7 +115,7 @@ public class CartScreen extends JPanel {
                     JOptionPane.showMessageDialog(this, "Failed to remove product.");
                 }
             }));
-            totalPrice =cartData.getTotalcart_amount();
+            totalPrice = cartData.getTotalcart_amount();
         }
         totalPriceLabel.setText("Total Price: $" + totalPrice);
         revalidate();

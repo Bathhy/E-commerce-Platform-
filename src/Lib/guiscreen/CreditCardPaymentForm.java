@@ -4,11 +4,18 @@ import constant.Constant;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Date;
+
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
+import controller.PaymentController;
+import model.OrderModel;
 
 public class CreditCardPaymentForm extends JFrame{
-
+    PaymentController paycontrol = new PaymentController();
+    private JRadioButton visaButton;
+    private JRadioButton mastercardButton;
+    private JRadioButton discoverButton;
     public  CreditCardPaymentForm() {
         // Create the main frame
         JFrame frame = new JFrame("Credit Card Payment");
@@ -37,9 +44,9 @@ public class CreditCardPaymentForm extends JFrame{
         frame.add(paymentMethodLabel, gbc);
 
         JPanel cardPanel = new JPanel(new GridLayout(1, 3, 5, 5)); // Adjusted for 3 buttons
-        JRadioButton visaButton = new JRadioButton("Visa");
-        JRadioButton mastercardButton = new JRadioButton("Mastercard");
-        JRadioButton discoverButton = new JRadioButton("Discover");
+         visaButton = new JRadioButton("Visa");
+         mastercardButton = new JRadioButton("Mastercard");
+         discoverButton = new JRadioButton("Discover");
 
         ButtonGroup cardGroup = new ButtonGroup();
         cardGroup.add(visaButton);
@@ -145,12 +152,39 @@ public class CreditCardPaymentForm extends JFrame{
             System.out.println("Card Number: " + cardNumber);
             System.out.println("CVV: " + cvv);
             System.out.println("Expiration Date: " + expirationLabel);
-            nav.navigateOrderDetails(e);
-            // Add any additional validation or processing logic here
+            int paymentType = getRadioPaymentType();
+            //new OrderModel().getOrderID()
+            Boolean isAddPayment = paycontrol.createPayment(6
+                    , paymentType,cardNumber, cvv,"2077-12-08"
+            );
+            if(isAddPayment){
+//                JOptionPane.showMessageDialog(frame, "Payment Successful");
+                System.out.println("Payment done nav to order detail");
+                nav.navigateOrderDetails(e);
+            }else{
+                System.out.println("error");
+            }
         });
 
-        // Display the frame
         frame.setVisible(true);
     }
+    private int getRadioPaymentType(){
+        if(visaButton.isSelected()){
+            System.out.println("1");
+            return  1;
+        }
+        if(mastercardButton.isSelected()){
+            System.out.println("radio 3");
+            return  2;
+        }
+        if(discoverButton.isSelected()){
+            System.out.println("radio 3");
+            return  3;
+        }
+        return  -1;
+    }
 
+//    public static void main(String[] args) {
+//        new CreditCardPaymentForm();
+//    }
 }
