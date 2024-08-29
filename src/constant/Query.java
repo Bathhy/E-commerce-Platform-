@@ -43,10 +43,12 @@ public class Query {
     public static String CHECK_CART_ITEM_EXIST = "SELECT * FROM cart_item WHERE cart_id_fk = ? AND product_id_fk =?;";
     public static String update_cart_item = "UPDATE cart_item SET qty = qty + ? WHERE cart_id_fk = ? AND product_id_fk = ?;";
     public static String removecart = "DELETE FROM cart_item WHERE cart_item.cart_id_fk=? AND cart_item.product_id_fk=?";
-    public static String UPDATE_CART_TOTAL = "UPDATE cart c SET c.total_cart_amount = (\n" +
-            "    SELECT SUM(p.price * ci.qty) \n" +
-            "    FROM cart_item ci \n" +
-            "    JOIN product p ON ci.product_id_fk = p.product_id \n" +
-            "    WHERE ci.cart_id_fk = ?\n" +
-            ") WHERE c.cart_id = ?;";
+    public static String createOrder = "INSERT INTO `e-com-platform`.order(cart_id, customer_id, orderdate) \n" +
+            "VALUES (?,?,?);";
+    public static String CREATE_ORDER_ITEM = "INSERT INTO `e-com-platform`.orderitem (order_id, product_id, qty, price) \n" +
+            "VALUES(?,?,?,?)";
+    public static String CREATE_PAYMENT= "INSERT INTO `e-com-platform`.payment(order_id_pay" +
+            ",payment_type_id, payment.cardnumber, payment.cvv_number, payment.card_expiration_month)\n" +
+            "VALUE(?,?,?,?,?);";
+    public static String GET_ORDER="SELECT * FROM `e-com-platform`.order WHERE customer_id=?;";
 }

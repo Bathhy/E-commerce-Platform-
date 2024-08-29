@@ -207,13 +207,16 @@ public class Homescreenecom extends JFrame {
         for (ProductModel prod : productsToDisplay) {
             homeContentPanel.add(new CardGridview(new JButton("Add to Cart"), prod, e -> {
                 int cartid = cartcontrol.getOrCreateCart(ProfileModel.getCustomid());
+                System.out.println("Cartid: " + ProfileModel.getCustomid());
                 if (cartid != -1) {
                     boolean isadd = cartcontrol.addItemToCart(
                             cartid, prod.getProductid(), prod.getQuantity()
                     );
                     if (isadd) {
                         JOptionPane.showMessageDialog(this, "Product added to cart successfully!");
+                        System.out.println("Cartid: " + ProfileModel.getCustomid());
                     } else {
+                        System.out.println("FailACc id : " + ProfileModel.getCustomid());
                         JOptionPane.showMessageDialog(this, "Failed to add product to cart.");
                     }
                 }
@@ -225,7 +228,4 @@ public class Homescreenecom extends JFrame {
         homeContentPanel.repaint();
     }
 
-    public static void main(String[] args) {
-        new Homescreenecom();
-    }
 }
