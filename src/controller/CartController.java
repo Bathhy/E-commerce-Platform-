@@ -10,14 +10,14 @@ import java.util.List;
 
 public class CartController {
 
-    private Connection con;
-    List<CartModel> carts = new ArrayList<CartModel>();
+    final private Connection con;
+    List<CartModel> carts = new ArrayList<>();
     public CartController(Connection con) {
         this.con = con;
     }
 
     public int getOrCreateCart(int customerId) {
-        int cartId = -1;
+        int cartId ;
         cartId = getExistingCartId(customerId);
         if (cartId == -1) {
             cartId = createCart(customerId);
@@ -121,7 +121,7 @@ public class CartController {
         }
         return false;
     }
-    private void updateCartTotalPrice(){}
+
     private Boolean checkItemExist(int cartid , int productId){
         try{
             PreparedStatement pst = con.prepareStatement(Query.CHECK_CART_ITEM_EXIST);
@@ -152,6 +152,45 @@ public class CartController {
             }
             getCartInformation(carts);
         }catch (SQLException e ){
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public Integer createOrder(int cartid, int customerId, Date orderDate) {
+        Integer orderId = null;
+        try {
+            PreparedStatement pst = con.prepareStatement(Query.createOrder, Statement.RETURN_GENERATED_KEYS);
+            pst.setInt(1, cartid);
+            pst.setInt(2, customerId);
+            pst.setDate(3, new java.sql.Date(orderDate.getTime()));
+            int rowsAffected = pst.executeUpdate();
+
+            if (rowsAffected > 0) {
+                try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        orderId = generatedKeys.getInt(1);  // Get the generated order ID
+                        System.out.println("Order created with Order ID: " + orderId);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orderId;
+    }
+    public Boolean createOrderItem(int orderId, int productId, int qty, double price){
+        try {
+            PreparedStatement pst = con.prepareStatement(Query.CREATE_ORDER_ITEM);
+            pst.setInt(1, orderId);
+            pst.setInt(2, productId);
+            pst.setInt(3, qty);
+            pst.setDouble(4, price);
+            int rowsAffected = pst.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Order Item created!");
+                return true;
+            }
+        }catch (SQLException e){
             e.printStackTrace();
         }
         return false;

@@ -28,13 +28,7 @@ public class CreditCardPaymentForm extends JFrame{
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Error label
-        JLabel errorLabel = new JLabel("Error: Card type name not specified!");
-        errorLabel.setForeground(Color.RED);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        frame.add(errorLabel, gbc);
+
 
         // Payment Method
         JLabel paymentMethodLabel = new JLabel("Payment Method");
@@ -117,10 +111,13 @@ public class CreditCardPaymentForm extends JFrame{
         gbc.gridy = 7;
         frame.add(expirationLabel, gbc);
 
-        DatePicker datePicker = new DatePicker();
+        DatePickerSettings dateSetting = new DatePickerSettings();
+        dateSetting.setFormatForDatesCommonEra("yyyy-MM-dd");
+        DatePicker datePicker = new DatePicker(dateSetting);
         gbc.gridx = 1;
         gbc.gridy = 7;
         gbc.gridwidth = 2;
+
         frame.add(datePicker, gbc);
 
         // Confirm Payment Button
@@ -143,7 +140,7 @@ public class CreditCardPaymentForm extends JFrame{
             String phone = phoneField.getText();
             String cardNumber = cardNumberField.getText();
             String cvv = cvvField.getText();
-            String DatePicker = datePicker.getText();
+            String cardExpireDate = datePicker.getText();
 
             // Print or process the payment details
             System.out.println("Confirm Payment button clicked");
@@ -151,14 +148,17 @@ public class CreditCardPaymentForm extends JFrame{
             System.out.println("Phone: " + phone);
             System.out.println("Card Number: " + cardNumber);
             System.out.println("CVV: " + cvv);
-            System.out.println("Expiration Date: " + expirationLabel);
+            System.out.println("Date picker data :"+cardExpireDate);
+
             int paymentType = getRadioPaymentType();
-            //new OrderModel().getOrderID()
-            Boolean isAddPayment = paycontrol.createPayment(6
-                    , paymentType,cardNumber, cvv,"2077-12-08"
+            if(phone.isEmpty()|| cardNumber.isEmpty()||cvv.isEmpty()||cardExpireDate.isEmpty() ||paymentType == 0 ){
+                JOptionPane.showMessageDialog(this
+                        ,"Please Fill all the information");
+            }
+            Boolean isAddPayment = paycontrol.createPayment(new OrderModel().getOrderID()
+                    , paymentType,cardNumber, cvv,cardExpireDate
             );
             if(isAddPayment){
-//                JOptionPane.showMessageDialog(frame, "Payment Successful");
                 System.out.println("Payment done nav to order detail");
                 nav.navigateOrderDetails(e);
             }else{
@@ -184,7 +184,7 @@ public class CreditCardPaymentForm extends JFrame{
         return  -1;
     }
 
-//    public static void main(String[] args) {
-//        new CreditCardPaymentForm();
-//    }
+    public static void main(String[] args) {
+        new CreditCardPaymentForm();
+    }
 }
