@@ -48,7 +48,7 @@ public class Query {
     public static String CREATE_ORDER_ITEM = "INSERT INTO `e-com-platform`.orderitem (order_id, product_id, qty, price) \n" +
             "VALUES(?,?,?,?)";
     public static String CREATE_PAYMENT= "INSERT INTO `e-com-platform`.payment(order_id_pay" +
-            ",payment_type_id, payment.cardnumber, payment.cvv_number, payment.card_expiration_month)\n" +
+            ",payment_type_id, payment.cardnumber, payment.cvv_number, payment.card_expiration_date)\n" +
             "VALUE(?,?,?,?,?);";
     public static String GET_ORDER="SELECT * FROM `e-com-platform`.order WHERE customer_id=?;";
 }

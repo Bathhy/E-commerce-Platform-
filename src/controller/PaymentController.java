@@ -22,10 +22,11 @@ public class PaymentController {
             pst.setString(3, cardNumber);
             pst.setString(4, cvvNumber);
             pst.setString(5, cardExpire);
+            System.out.println("DatePicker output: " + cardExpire);
+
             int rowApply = pst.executeUpdate();
             if(rowApply>0){
                 System.out.println("Already Already add to payment to DB");
-
             }
 
         }catch (SQLException e){
@@ -48,6 +49,6 @@ public class PaymentController {
                 e.printStackTrace();
             }
         }
-        return true;
+        return false;
     }
 }

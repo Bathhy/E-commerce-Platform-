@@ -59,36 +59,33 @@ public class CartScreen extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                                    new CreditCardPaymentForm();
+                if (cart.isEmpty()) {
+                    JOptionPane.showMessageDialog(parentFrame, "Your cart is empty. Please add items to proceed with checkout.");
+                    return;
+                }
+                CartModel firstCartItem = cart.get(0);
+                int cartId = firstCartItem.getCartid();
+
+                if (cartId == -1) {
+                    System.out.println("Invalid cart ID. Cannot proceed with order creation.");
+                    return;
+                }
+                 int orderId = cartController.createOrder(cartId, ProfileModel.getCustomid(),
+                        new java.sql.Date(orderDate.getTime()));
+                if(orderId != -1){
+                    for (CartModel cartItem : cart) {
+                        boolean orderItemCreated = cartController.createOrderItem(orderId,
+                                cartItem.getProductid(),
+                                cartItem.getQuantity(),
+                                cartItem.getPrice());
+                        if (!orderItemCreated) {
+                            System.out.println("Failed to create order item for product ID: " + cartItem.getProductid());
+                            return;
+                        }
+                    }
+                    new CreditCardPaymentForm();
                     parentFrame.dispose();
-
-//                if (cart.isEmpty()) {
-//                    JOptionPane.showMessageDialog(parentFrame, "Your cart is empty. Please add items to proceed with checkout.");
-//                    return;
-//                }
-//                CartModel firstCartItem = cart.get(0);
-//                int cartId = firstCartItem.getCartid();
-//
-//                if (cartId == -1) {
-//                    System.out.println("Invalid cart ID. Cannot proceed with order creation.");
-//                    return;
-//                }
-
-//                 int orderId = cartController.createOrder(cartId, ProfileModel.getCustomid(),
-//                        new java.sql.Date(orderDate.getTime()));
-//                if(orderId != -1){
-//                    for (CartModel cartItem : cart) {
-//                        boolean orderItemCreated = cartController.createOrderItem(orderId,
-//                                cartItem.getProductid(),
-//                                cartItem.getQuantity(),
-//                                cartItem.getPrice());
-//                        if (!orderItemCreated) {
-//                            System.out.println("Failed to create order item for product ID: " + cartItem.getProductid());
-//                            return;
-//                        }
-//                    }
-
-//                }
+                }
             }
         });
         bottomPanel.add(checkoutButton);
