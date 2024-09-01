@@ -50,7 +50,7 @@ public class LoginController {
 //    }
 
     public boolean loginUser(String username, String password) {
-        String query = Query.getcustomer;
+        String query = Query.GET_CUSTOMER;
 
         try (PreparedStatement pst = con.prepareStatement(query)) {
             pst.setString(1, username);

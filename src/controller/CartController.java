@@ -4,6 +4,7 @@ package controller;
 import constant.Query;
 import model.CartModel;
 import model.ProfileModel;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ public class CartController {
 
     final private Connection con;
     List<CartModel> carts = new ArrayList<>();
+    private ProfileModel prof = new ProfileModel();
     public CartController(Connection con) {
         this.con = con;
     }
@@ -21,12 +23,13 @@ public class CartController {
         cartId = getExistingCartId(customerId);
         if (cartId == -1) {
             cartId = createCart(customerId);
+            System.out.println("new cart created--->"+customerId);
         }
         return cartId;
     }
 
     private int getExistingCartId(int customerId) {
-        try (PreparedStatement pst = con.prepareStatement(Query.getcartid)) {
+        try (PreparedStatement pst = con.prepareStatement(Query.GET_CART_ID)) {
             pst.setInt(1, customerId);
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
@@ -39,29 +42,14 @@ public class CartController {
         return -1;
     }
 
-    private int createCart(int customerId) {
-        try (PreparedStatement pst = con.prepareStatement(Query.insertcart, Statement.RETURN_GENERATED_KEYS)) {
-            pst.setInt(1, customerId);
-            int rowsAffected = pst.executeUpdate();
-            if (rowsAffected > 0) {
-                try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        return generatedKeys.getInt(1);
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
+
 
     public void getCartInformation(List<CartModel> carts) {
         try {
-            String query = Query.getcartinfo;
+            String query = Query.GET_CART_INFO;
             PreparedStatement pst = con.prepareStatement(query);
-            pst.setInt(1 , ProfileModel.getCustomid());
-            pst.setInt(2 , ProfileModel.getCustomid());
+            pst.setInt(1 , prof.getCustomid());
+            pst.setInt(2 , prof.getCustomid());
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 System.out.println("Fetching Cart data:");
@@ -88,13 +76,31 @@ public class CartController {
             e.printStackTrace();
         }
     }
-
+    private int createCart(int customerId) {
+//        System.out.println("------------>Customer ID:"+customerId);
+        try (PreparedStatement pst = con.prepareStatement(Query.INSERT_CART, Statement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, customerId);
+            int rowsAffected = pst.executeUpdate();
+            if (rowsAffected > 0) {
+                try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            e.getMessage();
+        }
+        return -1;
+    }
     // Method to add item to cart
     public boolean addItemToCart(int customerId, int productId, int qty) {
+        System.out.println("------------>Customer ID:"+customerId);
         try {
             int cartId = getOrCreateCart(customerId);
             if(checkItemExist(cartId, productId)){
-               try(PreparedStatement pst = con.prepareStatement(Query.update_cart_item)){
+               try(PreparedStatement pst = con.prepareStatement(Query.UPDATE_CART_ITEM)){
                     pst.setInt(1, qty);
                    pst.setInt(2, cartId);
                    pst.setInt(3, productId);
@@ -105,7 +111,7 @@ public class CartController {
                    }
                }
             }else{
-                try (PreparedStatement pst = con.prepareStatement(Query.addtocartitem)) {
+                try (PreparedStatement pst = con.prepareStatement(Query.ADD_TO_CART_ITEM)) {
                     pst.setInt(1, cartId);
                     pst.setInt(2, productId);
                     pst.setInt(3, qty);
@@ -139,7 +145,7 @@ public class CartController {
     }
     public boolean removeItemCart(int cartid, int productId){
         try{
-            PreparedStatement pst = con.prepareStatement(Query.removecart);
+            PreparedStatement pst = con.prepareStatement(Query.REMOVE_CART);
             pst.setInt(1, cartid);
             pst.setInt(2, productId);
             int rowsAffected = pst.executeUpdate();
@@ -159,7 +165,7 @@ public class CartController {
     public Integer createOrder(int cartid, int customerId, Date orderDate) {
         Integer orderId = null;
         try {
-            PreparedStatement pst = con.prepareStatement(Query.createOrder, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement pst = con.prepareStatement(Query.CREATE_ORDER, Statement.RETURN_GENERATED_KEYS);
             pst.setInt(1, cartid);
             pst.setInt(2, customerId);
             pst.setDate(3, new java.sql.Date(orderDate.getTime()));

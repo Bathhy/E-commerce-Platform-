@@ -1,10 +1,9 @@
 package Lib.guiscreen;
 
 import Navigator.Navigate;
-import controller.LoginController;
-import model.ProfileModel;
-import model.UserModel;
 import constant.Constant;
+import controller.LoginController;
+import state.AuthenticationState;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,11 +11,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.*;
-
-import connection.MyDBConnection;
-import constant.Query;
-import state.AuthenticationState;
 
 public class LoginScreen extends JFrame  {
     private Container container;
@@ -104,8 +98,9 @@ public class LoginScreen extends JFrame  {
 
         loginbutton = new JButton("Login");
         loginbutton.setBounds(150, 140, 100, 30);
-        usertextField.setText("ankaramessi");
-        passwordField.setText("ankara1234");
+        usertextField.setText("bake");
+        passwordField.setText("1290");
+
         loginbutton.addActionListener(e -> {
             if(usertextField.getText().isEmpty() || passwordField.getText().isEmpty() ) {
                 JOptionPane.showMessageDialog(rootPane, "Please fill all the fields");
@@ -117,6 +112,7 @@ public class LoginScreen extends JFrame  {
                 boolean islogin = loginController.loginUser(username, password);
                 if(islogin) {
                     nav.navigateHome(e);
+
                 }else{
                     AuthenticationState.setLogin(false);
                    result.setText("Error Login Failed! Please try again");

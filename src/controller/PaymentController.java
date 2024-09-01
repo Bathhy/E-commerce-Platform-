@@ -1,14 +1,11 @@
 package controller;
 
-import com.github.lgooddatepicker.components.DatePicker;
 import connection.MyDBConnection;
 import constant.Query;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class PaymentController {
     Connection con = MyDBConnection.getInstance().getConnection();
@@ -22,7 +19,6 @@ public class PaymentController {
             pst.setString(3, cardNumber);
             pst.setString(4, cvvNumber);
             pst.setString(5, cardExpire);
-            System.out.println("DatePicker output: " + cardExpire);
 
             int rowApply = pst.executeUpdate();
             if(rowApply>0){
@@ -40,15 +36,11 @@ public class PaymentController {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            try{
-                if(con != null){
-                    con.close();
-                }
-            }
             catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return false;
+        return true
+                ;
     }
 }
