@@ -35,7 +35,7 @@ public class ProductModel   {
     }
 
     public  void setPrice(double price) {
-       this.price = price;
+        this.price = price;
     }
 
     public  int getQuantity() {
