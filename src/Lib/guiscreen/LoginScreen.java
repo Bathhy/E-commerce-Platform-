@@ -1,8 +1,10 @@
 package Lib.guiscreen;
 
+import Extension.Extension;
 import Navigator.Navigate;
 import constant.Constant;
 import controller.LoginController;
+import model.ProfileModel;
 import state.AuthenticationState;
 
 import javax.imageio.ImageIO;
@@ -27,19 +29,15 @@ public class LoginScreen extends JFrame  {
     private JLabel asksignuplabel;
     Navigate nav = new Navigate(this);
     LoginController loginController = new LoginController();
+    private ProfileModel prof = ProfileModel.getInstance();
     public LoginScreen() {
-        URL logourl;
-        try {
-            logourl = new URL(Constant.imgurl);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+
         setTitle("E-Commerce Platform");
         setSize(Constant.screenwidth, Constant.screenheight);
         try {
-            setIconImage(ImageIO.read(logourl));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            Extension.setFrameIcon(this, Constant.imgurl);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
         }
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         container = getContentPane();
@@ -100,6 +98,7 @@ public class LoginScreen extends JFrame  {
         loginbutton.setBounds(150, 140, 100, 30);
         usertextField.setText("bake");
         passwordField.setText("1290");
+
         loginbutton.addActionListener(e -> {
             if(usertextField.getText().isEmpty() || passwordField.getText().isEmpty() ) {
                 JOptionPane.showMessageDialog(rootPane, "Please fill all the fields");
@@ -110,6 +109,8 @@ public class LoginScreen extends JFrame  {
                 String password = String.valueOf(passwordField.getPassword());
                 boolean islogin = loginController.loginUser(username, password);
                 if(islogin) {
+                    loginController.getProfile();
+                    System.out.println("Customer ID: "+prof.getCustomid());
                     nav.navigateHome(e);
                 }else{
                     AuthenticationState.setLogin(false);
@@ -144,4 +145,6 @@ public class LoginScreen extends JFrame  {
         setLocationRelativeTo(null);
         setVisible(true);
     }
+
+
 }

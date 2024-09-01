@@ -1,44 +1,18 @@
 package Lib.guiscreen;
 
 import Extension.Extension;
-import connection.MyDBConnection;
 import constant.Constant;
-import constant.Query;
+import controller.LoginController;
 import model.ProfileModel;
-import model.UserModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class ProfileScreen extends JPanel {
-    private ProfileModel ProfileModel = model.ProfileModel.getInstance();
-    public void getProfile(){
-        try {
-            UserModel user= new UserModel();
-            Connection con = MyDBConnection.getInstance().getConnection();
-            String query = Query.GET_PROFILE_CUSTOMER;
-            PreparedStatement pst = con.prepareStatement(query);
-            pst.setString(1 , user.getUsername());
-            ResultSet resp = pst.executeQuery();
-            if(resp.next()) {
-                ProfileModel.setUsername(resp.getString("username"));
-                ProfileModel.setPhonenumber(resp.getString("phone_number"));
-                ProfileModel.setEmail(resp.getString("email"));
-                ProfileModel.setCustomid(resp.getInt("customer_id"));
-                System.out.println("Profile Name : "+ProfileModel.getCustomid());
-            }else{
-                System.out.println("No profile found");
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
+    final private LoginController loginControl = new LoginController();
+    private model.ProfileModel ProfileModel = model.ProfileModel.getInstance();
     public ProfileScreen() {
-        getProfile();
+        loginControl.getProfile();
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);

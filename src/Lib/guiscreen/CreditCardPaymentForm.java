@@ -1,5 +1,6 @@
 package Lib.guiscreen;
 
+import Extension.Extension;
 import Navigator.Navigate;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
@@ -23,12 +24,12 @@ public class CreditCardPaymentForm extends JFrame{
     private JRadioButton mastercardButton;
     private JRadioButton discoverButton;
     private OrderModel orderModel = new OrderModel();
-    private ProfileModel prf = new ProfileModel();
+    private ProfileModel prf = ProfileModel.getInstance();
     public int getOrder(int customerId) {
         Connection con = MyDBConnection.getInstance().getConnection();
         try {
             PreparedStatement pst = con.prepareStatement(Query.GET_ORDER);
-            pst.setInt(1, 2);
+            pst.setInt(1, prf.getCustomid());
             ResultSet res = pst.executeQuery();
             if (res.next()) { // Ensure we check if there is any order
                 int id = res.getInt("order_id"); // Fetch order_id
@@ -44,15 +45,16 @@ public class CreditCardPaymentForm extends JFrame{
         return -1;
     }
     public  CreditCardPaymentForm() {
-
-
         int id =getOrder(prf.getCustomid());
-
-
         JFrame frame = new JFrame("Credit Card Payment");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(Constant.screenwidth, Constant.screenheight); // Adjusted size to fit the new layout
         frame.setLayout(new GridBagLayout());
+        try {
+            Extension.setFrameIcon(this, Constant.imgurl);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
 
         // Create a GridBagConstraints object for layout
         GridBagConstraints gbc = new GridBagConstraints();

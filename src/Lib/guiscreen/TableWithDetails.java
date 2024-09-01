@@ -1,5 +1,6 @@
 package Lib.guiscreen;
 
+import Extension.Extension;
 import Navigator.Navigate;
 import constant.Constant;
 import controller.OrderController;
@@ -18,11 +19,16 @@ import java.util.Vector;
 public class TableWithDetails extends  JFrame{
     private Vector<OrderDetailModel> orderDetailData = new Vector<>();
     private final OrderController control = new OrderController();
-    private ProfileModel ProfileModel = new ProfileModel();
+    private ProfileModel ProfileModel = model.ProfileModel.getInstance();
     public TableWithDetails(){
 
         SwingUtilities.invokeLater(() -> {
             // Create the main frame
+            try {
+                Extension.setFrameIcon(this, Constant.imgurl);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
             JFrame frame = new JFrame("Order Details Table");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(Constant.screenwidth, Constant.screenheight);
@@ -80,6 +86,7 @@ public class TableWithDetails extends  JFrame{
             // Set the model to the table
             JTable table = new JTable(mod);
             // Set table background and foreground color
+            // Set table background and foreground color2
             table.setBackground(Color.WHITE);
             table.setForeground(Color.BLACK);
 

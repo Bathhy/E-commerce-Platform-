@@ -17,7 +17,7 @@ public class OrderController {
         Vector<OrderDetailModel> orderDetailList = new Vector<>();
         try {
             PreparedStatement pst = con.prepareStatement(Query.GET_ORDER_DETAIL);
-            pst.setInt(1, 2);
+            pst.setInt(1, customerId);
             ResultSet resp = pst.executeQuery();
             while (resp.next()) {
                 System.out.println("======================>Get Order Detail data:");
@@ -46,7 +46,7 @@ public class OrderController {
         PreparedStatement pst = null;
         try {
             pst = con.prepareStatement(Query.DELETE_CART);
-            pst.setInt(1, 2);
+            pst.setInt(1, customerID);
             int rowEffect = pst.executeUpdate();
             if(rowEffect > 0){
                 System.out.println("====================.>>Already Remove the Cart");

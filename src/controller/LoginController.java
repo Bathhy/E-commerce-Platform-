@@ -2,7 +2,7 @@ package controller;
 
 import connection.MyDBConnection;
 import constant.Query;
-import model.ProductModel;
+import model.ProfileModel;
 import model.UserModel;
 import state.AuthenticationState;
 
@@ -10,45 +10,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LoginController {
-    List<ProductModel> product = new ArrayList<>();
     Connection con = MyDBConnection.getInstance().getConnection();
-//    public List<ProductModel> getProduct() {
-//
-//        try {
-//
-//            String query = Query.getproduct;
-//            PreparedStatement pst = con.prepareStatement(query);
-//            ResultSet resp = pst.executeQuery();
-//            while (resp.next()) {
-//                System.out.println("Fetching data:");
-//                System.out.println("Name: " + resp.getString("name"));
-//                System.out.println("Price: " + resp.getDouble("price"));
-//                System.out.println("Quantity: " + resp.getInt("quantity"));
-//                System.out.println("Images: " + resp.getString("images"));
-//                System.out.println("Seller ID: " + resp.getString("seller_name"));
-//                ProductModel prod = new ProductModel(
-//                        resp.getString("name"),
-//                        resp.getDouble("price"),
-//                        resp.getInt("quantity"),
-//                        resp.getString("images"),
-//                        resp.getString("seller_name")
-//                );
-//                product.add(prod);
-//
-//            }
-//            for (ProductModel prod : product) {
-//                System.out.println("Product name: " + prod.getProductname());
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
+    private model.ProfileModel ProfileModel = model.ProfileModel.getInstance();
     public boolean loginUser(String username, String password) {
         String query = Query.GET_CUSTOMER;
 
@@ -74,4 +39,26 @@ public class LoginController {
         }
     }
 
+
+    public void getProfile(){
+        try {
+            UserModel user= new UserModel();
+            Connection con = MyDBConnection.getInstance().getConnection();
+            String query = Query.GET_PROFILE_CUSTOMER;
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setString(1 , user.getUsername());
+            ResultSet resp = pst.executeQuery();
+            if(resp.next()) {
+                ProfileModel.setUsername(resp.getString("username"));
+                ProfileModel.setPhonenumber(resp.getString("phone_number"));
+                ProfileModel.setEmail(resp.getString("email"));
+                ProfileModel.setCustomid(resp.getInt("customer_id"));
+                System.out.println("Profile Name : "+ProfileModel.getCustomid());
+            }else{
+                System.out.println("No profile found");
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 }
