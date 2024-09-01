@@ -59,8 +59,6 @@ public class Homescreenecom extends JFrame {
 
     public Homescreenecom() {
         // Set up the frame
-        profileScreen = new ProfileScreen();
-        profileScreen.getProfile();
         getProduct();
         setTitle("E-Commerce Platform");
         setSize(Constant.screenwidth, Constant.screenheight);
@@ -209,7 +207,7 @@ public class Homescreenecom extends JFrame {
                 System.out.println(" display Cartid: " + cartid);
                 if (cartid != -1) {
                     boolean isadd = cartcontrol.addItemToCart(
-                            cartid, prod.getProductid(), prod.getQuantity()
+                            2, prod.getProductid(), prod.getQuantity()
                     );
                     if (isadd) {
                         JOptionPane.showMessageDialog(this, "Product added to cart successfully!");

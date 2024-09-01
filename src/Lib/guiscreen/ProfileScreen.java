@@ -15,7 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ProfileScreen extends JPanel {
-    private ProfileModel ProfileModel = new ProfileModel();
+    private ProfileModel ProfileModel = model.ProfileModel.getInstance();
     public void getProfile(){
         try {
             UserModel user= new UserModel();

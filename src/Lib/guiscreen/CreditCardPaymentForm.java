@@ -28,7 +28,7 @@ public class CreditCardPaymentForm extends JFrame{
         Connection con = MyDBConnection.getInstance().getConnection();
         try {
             PreparedStatement pst = con.prepareStatement(Query.GET_ORDER);
-            pst.setInt(1, customerId);
+            pst.setInt(1, 2);
             ResultSet res = pst.executeQuery();
             if (res.next()) { // Ensure we check if there is any order
                 int id = res.getInt("order_id"); // Fetch order_id

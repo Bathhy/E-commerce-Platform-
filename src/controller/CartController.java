@@ -42,14 +42,12 @@ public class CartController {
         return -1;
     }
 
-
-
     public void getCartInformation(List<CartModel> carts) {
         try {
             String query = Query.GET_CART_INFO;
             PreparedStatement pst = con.prepareStatement(query);
-            pst.setInt(1 , prof.getCustomid());
-            pst.setInt(2 , prof.getCustomid());
+            pst.setInt(1 , 2);
+            pst.setInt(2 , 2);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 System.out.println("Fetching Cart data:");
@@ -167,7 +165,7 @@ public class CartController {
         try {
             PreparedStatement pst = con.prepareStatement(Query.CREATE_ORDER, Statement.RETURN_GENERATED_KEYS);
             pst.setInt(1, cartid);
-            pst.setInt(2, customerId);
+            pst.setInt(2, 2);
             pst.setDate(3, new java.sql.Date(orderDate.getTime()));
             int rowsAffected = pst.executeUpdate();
 

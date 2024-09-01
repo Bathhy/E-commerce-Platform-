@@ -2,12 +2,12 @@ package model;
 
 public class ProfileModel {
     private static ProfileModel instance;
-//    public static ProfileModel getInstance() {
-//        if (instance == null) {
-//            instance = new ProfileModel();
-//        }
-//        return instance;
-//    }
+    public static ProfileModel getInstance() {
+        if (instance == null) {
+            instance = new ProfileModel();
+        }
+        return instance;
+    }
     public String getUsername() {
         return username;
     }
