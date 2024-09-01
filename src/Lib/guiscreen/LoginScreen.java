@@ -100,7 +100,6 @@ public class LoginScreen extends JFrame  {
         loginbutton.setBounds(150, 140, 100, 30);
         usertextField.setText("bake");
         passwordField.setText("1290");
-
         loginbutton.addActionListener(e -> {
             if(usertextField.getText().isEmpty() || passwordField.getText().isEmpty() ) {
                 JOptionPane.showMessageDialog(rootPane, "Please fill all the fields");
@@ -112,7 +111,6 @@ public class LoginScreen extends JFrame  {
                 boolean islogin = loginController.loginUser(username, password);
                 if(islogin) {
                     nav.navigateHome(e);
-
                 }else{
                     AuthenticationState.setLogin(false);
                    result.setText("Error Login Failed! Please try again");
