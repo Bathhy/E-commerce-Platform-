@@ -1,40 +1,49 @@
 package model;
 
 public class ProfileModel {
-    public static String getUsername() {
+    private static ProfileModel instance;
+//    public static ProfileModel getInstance() {
+//        if (instance == null) {
+//            instance = new ProfileModel();
+//        }
+//        return instance;
+//    }
+    public String getUsername() {
         return username;
     }
 
-    public static void setUsername(String username) {
-        ProfileModel.username = username;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public static String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public static void setEmail(String email) {
-        ProfileModel.email = email;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public static String getPhonenumber() {
+    public String getPhonenumber() {
         return phonenumber;
     }
 
-    public static void setPhonenumber(String phonenumber) {
-        ProfileModel.phonenumber = phonenumber;
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
 
-    private static String username;
-    private static String email;
-    private static String phonenumber;
-    private static int customid;
-
-    public static int getCustomid() {
+    public int getCustomid() {
         return customid;
     }
 
-    public static void setCustomid(int customid) {
-        ProfileModel.customid = customid;
+    public void setCustomid(int customid) {
+        this.customid = customid;
     }
+
+    private  String username;
+    private  String email;
+    private  String phonenumber;
+    private  int customid;
+
+
 }

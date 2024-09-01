@@ -1,7 +1,9 @@
 package Lib.guiscreen;
 
 import Navigator.Navigate;
+import connection.MyDBConnection;
 import constant.Constant;
+import constant.Query;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,8 +14,6 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import connection.MyDBConnection;
-import constant.Query;
 
 public class SignUpScreen extends JFrame{
     private Container container;
@@ -137,7 +137,7 @@ public class SignUpScreen extends JFrame{
             }
             try {
                 Connection con =MyDBConnection.getInstance().getConnection();
-                String query = Query.createcustomer;
+                String query = Query.CREATE_CUSTOMER;
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setString(1, username);
                 stmt.setString(2, password);

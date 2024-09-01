@@ -1,8 +1,5 @@
 package Lib.guiscreen;
 
-import Lib.guiscreen.CardGridview;
-import Lib.guiscreen.CartScreen;
-import Lib.guiscreen.ProfileScreen;
 import connection.MyDBConnection;
 import constant.Constant;
 import constant.Query;
@@ -32,12 +29,13 @@ public class Homescreenecom extends JFrame {
     private List<ProductModel> filteredProducts = new ArrayList<>();
     private JPanel homeContentPanel;
     private CartController cartcontrol;
+    private ProfileModel prof = new ProfileModel();
 
     Connection con = MyDBConnection.getInstance().getConnection();
 
     public void getProduct() {
         try {
-            String query = Query.getproduct;
+            String query = Query.GET_PRODUCT;
             PreparedStatement pst = con.prepareStatement(query);
             ResultSet resp = pst.executeQuery();
             while (resp.next()) {
@@ -60,8 +58,9 @@ public class Homescreenecom extends JFrame {
     }
 
     public Homescreenecom() {
-
         // Set up the frame
+        profileScreen = new ProfileScreen();
+        profileScreen.getProfile();
         getProduct();
         setTitle("E-Commerce Platform");
         setSize(Constant.screenwidth, Constant.screenheight);
@@ -203,20 +202,20 @@ public class Homescreenecom extends JFrame {
 
     private void displayProducts(List<ProductModel> productsToDisplay) {
         homeContentPanel.removeAll(); // Clear the existing products
-
+        System.out.println("----------=+++userid :"+ prof.getCustomid());
         for (ProductModel prod : productsToDisplay) {
             homeContentPanel.add(new CardGridview(new JButton("Add to Cart"), prod, e -> {
-                int cartid = cartcontrol.getOrCreateCart(ProfileModel.getCustomid());
-                System.out.println("Cartid: " + ProfileModel.getCustomid());
+                int cartid = cartcontrol.getOrCreateCart(2);
+                System.out.println(" display Cartid: " + cartid);
                 if (cartid != -1) {
                     boolean isadd = cartcontrol.addItemToCart(
                             cartid, prod.getProductid(), prod.getQuantity()
                     );
                     if (isadd) {
                         JOptionPane.showMessageDialog(this, "Product added to cart successfully!");
-                        System.out.println("Cartid: " + ProfileModel.getCustomid());
+                        System.out.println("Cartid: " + prof.getCustomid());
                     } else {
-                        System.out.println("FailACc id : " + ProfileModel.getCustomid());
+                        System.out.println("FailACc id : " + prof.getCustomid());
                         JOptionPane.showMessageDialog(this, "Failed to add product to cart.");
                     }
                 }

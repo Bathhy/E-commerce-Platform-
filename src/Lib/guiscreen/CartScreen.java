@@ -3,9 +3,7 @@ package Lib.guiscreen;
 import connection.MyDBConnection;
 import controller.CartController;
 import model.CartModel;
-import model.ProductModel;
 import model.ProfileModel;
-import model.UserModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +19,7 @@ public class CartScreen extends JPanel {
     private List<CartModel> cart = new ArrayList<>();
     private Connection con = MyDBConnection.getInstance().getConnection();
     private CartController cartController = new CartController(con);
+    private ProfileModel prof = new ProfileModel();
     private JPanel gridPanel;
     private JLabel totalPriceLabel = new JLabel();
 
@@ -70,7 +69,7 @@ public class CartScreen extends JPanel {
                     System.out.println("Invalid cart ID. Cannot proceed with order creation.");
                     return;
                 }
-                 int orderId = cartController.createOrder(cartId, ProfileModel.getCustomid(),
+                 int orderId = cartController.createOrder(cartId, prof.getCustomid(),
                         new java.sql.Date(orderDate.getTime()));
                 if(orderId != -1){
                     for (CartModel cartItem : cart) {
@@ -83,6 +82,7 @@ public class CartScreen extends JPanel {
                             return;
                         }
                     }
+
                     new CreditCardPaymentForm();
                     parentFrame.dispose();
                 }

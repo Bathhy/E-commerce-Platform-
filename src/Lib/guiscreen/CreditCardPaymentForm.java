@@ -1,23 +1,54 @@
 package Lib.guiscreen;
+
 import Navigator.Navigate;
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
+import connection.MyDBConnection;
 import constant.Constant;
+import constant.Query;
+import controller.PaymentController;
+import model.OrderModel;
+import model.ProfileModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Date;
-
-import com.github.lgooddatepicker.components.DatePicker;
-import com.github.lgooddatepicker.components.DatePickerSettings;
-import controller.PaymentController;
-import model.OrderModel;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class CreditCardPaymentForm extends JFrame{
     PaymentController paycontrol = new PaymentController();
     private JRadioButton visaButton;
     private JRadioButton mastercardButton;
     private JRadioButton discoverButton;
+    private OrderModel orderModel = new OrderModel();
+    private ProfileModel prf = new ProfileModel();
+    public int getOrder(int customerId) {
+        Connection con = MyDBConnection.getInstance().getConnection();
+        try {
+            PreparedStatement pst = con.prepareStatement(Query.GET_ORDER);
+            pst.setInt(1, customerId);
+            ResultSet res = pst.executeQuery();
+            if (res.next()) { // Ensure we check if there is any order
+                int id = res.getInt("order_id"); // Fetch order_id
+                orderModel.setOrderID(id);
+                System.out.println("XXXXXXX Order ID fetched from DB: " + id);
+                return id; // Return the fetched order ID
+            } else {
+                System.out.println("No order found for customer ID: " + customerId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
     public  CreditCardPaymentForm() {
-        // Create the main frame
+
+
+        int id =getOrder(prf.getCustomid());
+
+
         JFrame frame = new JFrame("Credit Card Payment");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(Constant.screenwidth, Constant.screenheight); // Adjusted size to fit the new layout
@@ -134,6 +165,11 @@ public class CreditCardPaymentForm extends JFrame{
         confirmPaymentButton.setBorderPainted(false);    // Remove the border
         Navigate nav = new Navigate(frame);
         // Handle button clicks
+        ownerField.setText("Goldamy");
+        phoneField.setText("012345435");
+        cardNumberField.setText("992-11-168");
+        cvvField.setText("16879");
+
         confirmPaymentButton.addActionListener(e -> {
             // Retrieve input values
             String owner = ownerField.getText();
@@ -144,7 +180,6 @@ public class CreditCardPaymentForm extends JFrame{
 
             // Print or process the payment details
             System.out.println("Confirm Payment button clicked");
-            System.out.println("Owner: " + owner);
             System.out.println("Phone: " + phone);
             System.out.println("Card Number: " + cardNumber);
             System.out.println("CVV: " + cvv);
@@ -155,9 +190,10 @@ public class CreditCardPaymentForm extends JFrame{
                 JOptionPane.showMessageDialog(this
                         ,"Please Fill all the information");
             }
-            Boolean isAddPayment = paycontrol.createPayment(new OrderModel().getOrderID()
+            Boolean isAddPayment = paycontrol.createPayment(id
                     , paymentType,cardNumber, cvv,cardExpireDate
             );
+            System.out.println("===========> order id"+orderModel.getOrderID());
             if(isAddPayment){
                 System.out.println("Payment done nav to order detail");
                 nav.navigateOrderDetails(e);
