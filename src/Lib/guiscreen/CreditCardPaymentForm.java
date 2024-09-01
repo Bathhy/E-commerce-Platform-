@@ -23,12 +23,12 @@ public class CreditCardPaymentForm extends JFrame{
     private JRadioButton mastercardButton;
     private JRadioButton discoverButton;
     private OrderModel orderModel = new OrderModel();
-    private ProfileModel prf = new ProfileModel();
+    private ProfileModel prf = ProfileModel.getInstance();
     public int getOrder(int customerId) {
         Connection con = MyDBConnection.getInstance().getConnection();
         try {
             PreparedStatement pst = con.prepareStatement(Query.GET_ORDER);
-            pst.setInt(1, 2);
+            pst.setInt(1, prf.getCustomid());
             ResultSet res = pst.executeQuery();
             if (res.next()) { // Ensure we check if there is any order
                 int id = res.getInt("order_id"); // Fetch order_id

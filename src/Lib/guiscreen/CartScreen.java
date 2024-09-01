@@ -19,7 +19,7 @@ public class CartScreen extends JPanel {
     private List<CartModel> cart = new ArrayList<>();
     private Connection con = MyDBConnection.getInstance().getConnection();
     private CartController cartController = new CartController(con);
-    private ProfileModel prof = new ProfileModel();
+    private ProfileModel prof = ProfileModel.getInstance();
     private JPanel gridPanel;
     private JLabel totalPriceLabel = new JLabel();
 

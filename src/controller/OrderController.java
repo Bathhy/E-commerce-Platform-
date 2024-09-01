@@ -46,7 +46,7 @@ public class OrderController {
         PreparedStatement pst = null;
         try {
             pst = con.prepareStatement(Query.DELETE_CART);
-            pst.setInt(1, 2);
+            pst.setInt(1, customerID);
             int rowEffect = pst.executeUpdate();
             if(rowEffect > 0){
                 System.out.println("====================.>>Already Remove the Cart");

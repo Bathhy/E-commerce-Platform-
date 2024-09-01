@@ -29,7 +29,7 @@ public class Homescreenecom extends JFrame {
     private List<ProductModel> filteredProducts = new ArrayList<>();
     private JPanel homeContentPanel;
     private CartController cartcontrol;
-    private ProfileModel prof = new ProfileModel();
+    private ProfileModel prof = ProfileModel.getInstance();
 
     Connection con = MyDBConnection.getInstance().getConnection();
 
@@ -203,11 +203,12 @@ public class Homescreenecom extends JFrame {
         System.out.println("----------=+++userid :"+ prof.getCustomid());
         for (ProductModel prod : productsToDisplay) {
             homeContentPanel.add(new CardGridview(new JButton("Add to Cart"), prod, e -> {
-                int cartid = cartcontrol.getOrCreateCart(2);
-                System.out.println(" display Cartid: " + cartid);
+//                System.out.println("this is passing----->>>:"+prof.getCustomid());
+                int cartid = cartcontrol.getOrCreateCart(prof.getCustomid());
+//                System.out.println(" display Cartid: " + cartid);
                 if (cartid != -1) {
                     boolean isadd = cartcontrol.addItemToCart(
-                            2, prod.getProductid(), prod.getQuantity()
+                            prof.getCustomid(), prod.getProductid(), prod.getQuantity()
                     );
                     if (isadd) {
                         JOptionPane.showMessageDialog(this, "Product added to cart successfully!");

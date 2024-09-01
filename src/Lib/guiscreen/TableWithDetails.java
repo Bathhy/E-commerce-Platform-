@@ -18,7 +18,7 @@ import java.util.Vector;
 public class TableWithDetails extends  JFrame{
     private Vector<OrderDetailModel> orderDetailData = new Vector<>();
     private final OrderController control = new OrderController();
-    private ProfileModel ProfileModel = new ProfileModel();
+    private ProfileModel ProfileModel = model.ProfileModel.getInstance();
     public TableWithDetails(){
 
         SwingUtilities.invokeLater(() -> {
@@ -80,6 +80,7 @@ public class TableWithDetails extends  JFrame{
             // Set the model to the table
             JTable table = new JTable(mod);
             // Set table background and foreground color
+            // Set table background and foreground color2
             table.setBackground(Color.WHITE);
             table.setForeground(Color.BLACK);
 
