@@ -1,5 +1,6 @@
 package Lib.guiscreen;
 
+import Extension.Extension;
 import Navigator.Navigate;
 import constant.Constant;
 import controller.LoginController;
@@ -30,17 +31,12 @@ public class LoginScreen extends JFrame  {
     LoginController loginController = new LoginController();
     private ProfileModel prof = ProfileModel.getInstance();
     public LoginScreen() {
-        URL logourl;
-        try {
-            logourl = new URL(Constant.imgurl);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+
         setTitle("E-Commerce Platform");
         setSize(Constant.screenwidth, Constant.screenheight);
         try {
-            setIconImage(ImageIO.read(logourl));
-        } catch (IOException | RuntimeException e) {
+            Extension.setFrameIcon(this, Constant.imgurl);
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

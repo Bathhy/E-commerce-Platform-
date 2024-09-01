@@ -1,5 +1,6 @@
 package Lib.guiscreen;
 
+import Extension.Extension;
 import connection.MyDBConnection;
 import constant.Constant;
 import constant.Query;
@@ -60,6 +61,11 @@ public class Homescreenecom extends JFrame {
     public Homescreenecom() {
         // Set up the frame
         getProduct();
+        try {
+            Extension.setFrameIcon(this, Constant.imgurl);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
         setTitle("E-Commerce Platform");
         setSize(Constant.screenwidth, Constant.screenheight);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

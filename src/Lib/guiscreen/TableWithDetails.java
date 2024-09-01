@@ -1,5 +1,6 @@
 package Lib.guiscreen;
 
+import Extension.Extension;
 import Navigator.Navigate;
 import constant.Constant;
 import controller.OrderController;
@@ -23,6 +24,11 @@ public class TableWithDetails extends  JFrame{
 
         SwingUtilities.invokeLater(() -> {
             // Create the main frame
+            try {
+                Extension.setFrameIcon(this, Constant.imgurl);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
             JFrame frame = new JFrame("Order Details Table");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(Constant.screenwidth, Constant.screenheight);

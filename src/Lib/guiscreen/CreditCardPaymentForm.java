@@ -1,5 +1,6 @@
 package Lib.guiscreen;
 
+import Extension.Extension;
 import Navigator.Navigate;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
@@ -44,15 +45,16 @@ public class CreditCardPaymentForm extends JFrame{
         return -1;
     }
     public  CreditCardPaymentForm() {
-
-
         int id =getOrder(prf.getCustomid());
-
-
         JFrame frame = new JFrame("Credit Card Payment");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(Constant.screenwidth, Constant.screenheight); // Adjusted size to fit the new layout
         frame.setLayout(new GridBagLayout());
+        try {
+            Extension.setFrameIcon(this, Constant.imgurl);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
 
         // Create a GridBagConstraints object for layout
         GridBagConstraints gbc = new GridBagConstraints();
