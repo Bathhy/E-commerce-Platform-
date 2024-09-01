@@ -191,12 +191,20 @@ public class Homescreenecom extends JFrame {
     private void performSearch(String query) {
         filteredProducts.clear();
         for (ProductModel prod : product) {
-            if (prod.getName().toLowerCase().contains(query.toLowerCase())) {
+            // Convert the query to lowercase for case-insensitive search
+            String lowerCaseQuery = query.toLowerCase();
+
+            // Convert product details to string and compare with the query
+            if (prod.getName().toLowerCase().contains(lowerCaseQuery) ||
+                    String.valueOf(prod.getProductid()).contains(lowerCaseQuery) ||
+                    prod.getSellerName().toLowerCase().contains(lowerCaseQuery)) {
+
                 filteredProducts.add(prod);
             }
         }
         displayProducts(filteredProducts);
     }
+
 
     private void displayProducts(List<ProductModel> productsToDisplay) {
         homeContentPanel.removeAll(); // Clear the existing products
