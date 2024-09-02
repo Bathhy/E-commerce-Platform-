@@ -193,23 +193,38 @@ public class Homescreenecom extends JFrame {
         CardLayout cardLayout = (CardLayout) contentPanel.getLayout();
         cardLayout.show(contentPanel, panelName);
     }
-
     private void performSearch(String query) {
         filteredProducts.clear();
+        String lowerCaseQuery = query.toLowerCase();
+
         for (ProductModel prod : product) {
-            // Convert the query to lowercase for case-insensitive search
-            String lowerCaseQuery = query.toLowerCase();
-
-            // Convert product details to string and compare with the query
-            if (prod.getName().toLowerCase().contains(lowerCaseQuery) ||
-                    String.valueOf(prod.getProductid()).contains(lowerCaseQuery) ||
-                    prod.getSellerName().toLowerCase().contains(lowerCaseQuery)) {
-
-                filteredProducts.add(prod);
+            // Check if the query is a number (for product ID) or a string (for name or seller)
+            if (isNumeric(lowerCaseQuery)) {
+                // Search by Product ID
+                if (String.valueOf(prod.getProductid()).contains(lowerCaseQuery)) {
+                    filteredProducts.add(prod);
+                }
+            } else {
+                // Search by Name or Seller Name
+                if (prod.getName().toLowerCase().contains(lowerCaseQuery) ||
+                        prod.getSellerName().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredProducts.add(prod);
+                }
             }
         }
         displayProducts(filteredProducts);
     }
+
+    // Helper method to check if the query is numeric
+    private boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
 
 
     private void displayProducts(List<ProductModel> productsToDisplay) {
