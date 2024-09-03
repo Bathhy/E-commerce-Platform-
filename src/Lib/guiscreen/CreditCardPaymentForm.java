@@ -28,7 +28,7 @@ public class CreditCardPaymentForm extends JFrame {
     private JRadioButton visaButton;
     private JRadioButton mastercardButton;
     private JRadioButton discoverButton;
-    private OrderModel orderModel = new OrderModel();
+    private OrderModel orderModel = OrderModel.getInstance();
 
     private ProfileModel prf = ProfileModel.getInstance();
     private Connection con = MyDBConnection.getInstance().getConnection();
@@ -61,11 +61,9 @@ public class CreditCardPaymentForm extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(Constant.screenwidth, Constant.screenheight); // Adjusted size to fit the new layout
         frame.setLayout(new GridBagLayout());
-        try {
-            Extension.setFrameIcon(this, Constant.imgurl);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
+        frame.setLocationRelativeTo(null);
+
+
 
         // Create a GridBagConstraints object for layout
         GridBagConstraints gbc = new GridBagConstraints();

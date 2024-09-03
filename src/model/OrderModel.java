@@ -1,6 +1,14 @@
 package model;
 
 public class OrderModel {
+    private static OrderModel instance ;
+    public static OrderModel getInstance() {
+        if (instance == null) {
+            instance = new OrderModel();
+        }
+        return instance;
+    }
+
     public int getOrderID() {
         return orderID;
     }

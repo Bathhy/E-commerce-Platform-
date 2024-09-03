@@ -47,7 +47,6 @@ public class Homescreenecom extends JFrame {
                 System.out.println("id " + resp.getInt("product_id"));
                 System.out.println("Name: " + resp.getString("name"));
                 System.out.println("Price: " + resp.getDouble("price"));
-                System.out.println("Quantity: " + resp.getInt("quantity"));
                 System.out.println("Images: " + resp.getString("images"));
                 System.out.println("Seller ID: " + resp.getString("seller_name"));
                 ProductModel prod = new ProductModel(resp.getString("name"), resp.getDouble("price"),
