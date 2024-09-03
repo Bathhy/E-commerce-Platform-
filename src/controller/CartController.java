@@ -160,15 +160,15 @@ public class CartController {
         }
         return false;
     }
-    public Integer createOrder(int cartid, int customerId, Date orderDate) {
+    public Integer createOrder(int cartid,int paymentId, int customerId, Date orderDate) {
         Integer orderId = null;
         try {
             PreparedStatement pst = con.prepareStatement(Query.CREATE_ORDER, Statement.RETURN_GENERATED_KEYS);
             pst.setInt(1, cartid);
-            pst.setInt(2, customerId);
-            pst.setDate(3, new java.sql.Date(orderDate.getTime()));
+            pst.setInt(2,paymentId);
+            pst.setInt(3, customerId);
+            pst.setDate(4, new java.sql.Date(orderDate.getTime()));
             int rowsAffected = pst.executeUpdate();
-
             if (rowsAffected > 0) {
                 try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
                     if (generatedKeys.next()) {

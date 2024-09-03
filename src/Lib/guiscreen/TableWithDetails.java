@@ -2,8 +2,11 @@ package Lib.guiscreen;
 
 import Extension.Extension;
 import Navigator.Navigate;
+import connection.MyDBConnection;
 import constant.Constant;
+import controller.CartController;
 import controller.OrderController;
+import model.CartModel;
 import model.OrderDetailModel;
 import model.ProfileModel;
 
@@ -14,16 +17,23 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class TableWithDetails extends  JFrame{
     private Vector<OrderDetailModel> orderDetailData = new Vector<>();
     private final OrderController control = new OrderController();
     private ProfileModel ProfileModel = model.ProfileModel.getInstance();
+    private Connection con = MyDBConnection.getInstance().getConnection();
+    private CartController cartController = new CartController(con);
+    private List<CartModel> cart = new ArrayList<>();
     public TableWithDetails(){
 
         SwingUtilities.invokeLater(() -> {
             // Create the main frame
+            cartController.getCartInformation(cart);
             try {
                 Extension.setFrameIcon(this, Constant.imgurl);
             } catch (RuntimeException e) {
@@ -66,7 +76,10 @@ public class TableWithDetails extends  JFrame{
             DefaultTableModel mod = new DefaultTableModel(columnNames, 0);
 
             // Retrieve data from controller
-            orderDetailData = control.getOrdersDetail(ProfileModel.getCustomid());
+//            orderDetailData = control.getOrdersDetail(ProfileModel.getCustomid());
+            CartModel firstCartItem = cart.get(0);
+            int cartId = firstCartItem.getCartid();
+            orderDetailData = control.getOrdersDetail(cartId, ProfileModel.getCustomid());
 
             for (OrderDetailModel orderDetail : orderDetailData) {
                 Object[] row = new Object[]{

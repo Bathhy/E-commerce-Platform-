@@ -43,13 +43,12 @@ public class Query {
     public static String CHECK_CART_ITEM_EXIST = "SELECT * FROM cart_item WHERE cart_id_fk = ? AND product_id_fk =?;";
     public static String UPDATE_CART_ITEM = "UPDATE cart_item SET qty = qty + ? WHERE cart_id_fk = ? AND product_id_fk = ?;";
     public static String REMOVE_CART = "DELETE FROM cart_item WHERE cart_item.cart_id_fk=? AND cart_item.product_id_fk=?";
-    public static String CREATE_ORDER = "INSERT INTO `e-com-platform`.order(cart_id, customer_id, orderdate) \n" +
-            "VALUES (?,?,?);";
+    public static String CREATE_ORDER = "INSERT INTO `e-com-platform`.order(cart_id,paymet_id_fk, customer_id, orderdate)\n" +
+            "            VALUES (?,?,?,?);";
     public static String CREATE_ORDER_ITEM = "INSERT INTO `e-com-platform`.orderitem (order_id, product_id, qty, price) \n" +
             "VALUES(?,?,?,?)";
-    public static String CREATE_PAYMENT= "INSERT INTO `e-com-platform`.payment(order_id_pay" +
-            ",payment_type_id, payment.cardnumber, payment.cvv_number, payment.card_expiration_date)\n" +
-            "VALUE(?,?,?,?,?);";
+    public static String CREATE_PAYMENT= "INSERT INTO `e-com-platform`.payment(payment_type_id, payment.cardnumber, payment.cvv_number, payment.card_expiration_date)\n" +
+            "VALUE(?,?,?,?);";
     public static String GET_ORDER="SELECT * FROM `e-com-platform`.order WHERE customer_id=?;";
     public static String GET_ORDER_DETAIL= "SELECT \n" +
             "    pr.name AS ProductName,\n" +
@@ -73,16 +72,17 @@ public class Query {
             "JOIN \n" +
             "    `e-com-platform`.seller s ON pr.seller_id = s.seller_id\n" +
             "JOIN \n" +
-            "    `e-com-platform`.payment py ON o.order_id = py.order_id_pay\n" +
+            "    `e-com-platform`.payment py ON o.paymet_id_fk = py.payment_id\n" +
             "JOIN \n" +
             "    `e-com-platform`.payment_type payt ON py.payment_type_id = payt.payment_type_id\n" +
             "JOIN \n" +
             "    `e-com-platform`.customer c ON o.customer_id = c.customer_id\n" +
             "\n" +
-            "WHERE o.customer_id = ?;";
+            "WHERE o.cart_id = ? AND o.customer_id=?;";
     public static String DELETE_CART_ITEM = "DELETE FROM cart_item WHERE cart_item.cart_id_fk IN (SELECT cart.cart_id FROM cart WHERE cart.customer_id_fk = ?)";
     public static String DELETE_CART= "DELETE cart_itemd\n" +
             "FROM cart_item cart_itemd\n" +
             "JOIN cart c ON c.cart_id = cart_itemd.cart_id_fk\n" +
             "WHERE c.customer_id_fk = ?;";
+
 }

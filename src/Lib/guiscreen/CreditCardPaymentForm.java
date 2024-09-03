@@ -7,7 +7,9 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 import connection.MyDBConnection;
 import constant.Constant;
 import constant.Query;
+import controller.CartController;
 import controller.PaymentController;
+import model.CartModel;
 import model.OrderModel;
 import model.ProfileModel;
 
@@ -17,14 +19,22 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-public class CreditCardPaymentForm extends JFrame{
+public class CreditCardPaymentForm extends JFrame {
     PaymentController paycontrol = new PaymentController();
     private JRadioButton visaButton;
     private JRadioButton mastercardButton;
     private JRadioButton discoverButton;
     private OrderModel orderModel = new OrderModel();
+
     private ProfileModel prf = ProfileModel.getInstance();
+    private Connection con = MyDBConnection.getInstance().getConnection();
+    private CartController cartController = new CartController(con);
+    private List<CartModel> cart = new ArrayList<>();
+
     public int getOrder(int customerId) {
         Connection con = MyDBConnection.getInstance().getConnection();
         try {
@@ -44,8 +54,9 @@ public class CreditCardPaymentForm extends JFrame{
         }
         return -1;
     }
-    public  CreditCardPaymentForm() {
-        int id =getOrder(prf.getCustomid());
+
+    public CreditCardPaymentForm() {
+        int id = getOrder(prf.getCustomid());
         JFrame frame = new JFrame("Credit Card Payment");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(Constant.screenwidth, Constant.screenheight); // Adjusted size to fit the new layout
@@ -62,7 +73,6 @@ public class CreditCardPaymentForm extends JFrame{
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
 
-
         // Payment Method
         JLabel paymentMethodLabel = new JLabel("Payment Method");
         gbc.gridx = 0;
@@ -71,9 +81,9 @@ public class CreditCardPaymentForm extends JFrame{
         frame.add(paymentMethodLabel, gbc);
 
         JPanel cardPanel = new JPanel(new GridLayout(1, 3, 5, 5)); // Adjusted for 3 buttons
-         visaButton = new JRadioButton("Visa");
-         mastercardButton = new JRadioButton("Mastercard");
-         discoverButton = new JRadioButton("Discover");
+        visaButton = new JRadioButton("Visa");
+        mastercardButton = new JRadioButton("Mastercard");
+        discoverButton = new JRadioButton("Discover");
 
         ButtonGroup cardGroup = new ButtonGroup();
         cardGroup.add(visaButton);
@@ -171,8 +181,9 @@ public class CreditCardPaymentForm extends JFrame{
         phoneField.setText("012345435");
         cardNumberField.setText("992-11-168");
         cvvField.setText("16879");
-
+        Date orderDate = new Date();
         confirmPaymentButton.addActionListener(e -> {
+            cartController.getCartInformation(cart);
             // Retrieve input values
             String owner = ownerField.getText();
             String phone = phoneField.getText();
@@ -185,41 +196,65 @@ public class CreditCardPaymentForm extends JFrame{
             System.out.println("Phone: " + phone);
             System.out.println("Card Number: " + cardNumber);
             System.out.println("CVV: " + cvv);
-            System.out.println("Date picker data :"+cardExpireDate);
-
+            System.out.println("Date picker data :" + cardExpireDate);
             int paymentType = getRadioPaymentType();
-            if(phone.isEmpty()|| cardNumber.isEmpty()||cvv.isEmpty()||cardExpireDate.isEmpty() ||paymentType == 0 ){
+            if (phone.isEmpty() || cardNumber.isEmpty() || cvv.isEmpty() || cardExpireDate.isEmpty() || paymentType == 0) {
                 JOptionPane.showMessageDialog(this
-                        ,"Please Fill all the information");
+                        , "Please Fill all the information");
             }
-            Boolean isAddPayment = paycontrol.createPayment(id
-                    , paymentType,cardNumber, cvv,cardExpireDate
+            int isAddPayment = paycontrol.createPayment(paymentType, cardNumber, cvv, cardExpireDate
             );
-            System.out.println("===========> order id"+orderModel.getOrderID());
-            if(isAddPayment){
+
+            if (cart.isEmpty()) {
+                JOptionPane.showMessageDialog(this
+                        , "Your cart is empty. Please add items to proceed with checkout.");
+                return;
+            }
+            CartModel firstCartItem = cart.get(0);
+            int cartId = firstCartItem.getCartid();
+            if (cartId == -1) {
+                System.out.println("Invalid cart ID. Cannot proceed with order creation.");
+                return;
+            }
+            int orderId = cartController.createOrder(cartId, isAddPayment, prf.getCustomid(),
+                    new java.sql.Date(orderDate.getTime()));
+            if (orderId != -1) {
+                for (CartModel cartItem : cart) {
+                    boolean orderItemCreated = cartController.createOrderItem(orderId,
+                            cartItem.getProductid(),
+                            cartItem.getQuantity(),
+                            cartItem.getPrice());
+                    if (!orderItemCreated) {
+                        System.out.println("Failed to create order item for product ID: " + cartItem.getProductid());
+                        return;
+                    }
+                }
+            }
+            if (isAddPayment != -1) {
                 System.out.println("Payment done nav to order detail");
                 nav.navigateOrderDetails(e);
-            }else{
-                System.out.println("error");
+            } else {
+                System.out.println("error payment");
             }
         });
 
         frame.setVisible(true);
     }
-    private int getRadioPaymentType(){
-        if(visaButton.isSelected()){
+
+    private int getRadioPaymentType() {
+        if (visaButton.isSelected()) {
             System.out.println("1");
-            return  1;
+            return 1;
         }
-        if(mastercardButton.isSelected()){
+        if (mastercardButton.isSelected()) {
             System.out.println("radio 3");
-            return  2;
+            return 2;
         }
-        if(discoverButton.isSelected()){
+        if (discoverButton.isSelected()) {
             System.out.println("radio 3");
-            return  3;
+            return 3;
         }
-        return  -1;
+        return -1;
     }
 
     public static void main(String[] args) {

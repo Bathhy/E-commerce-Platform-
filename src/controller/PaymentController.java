@@ -5,24 +5,29 @@ import constant.Query;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PaymentController {
     Connection con = MyDBConnection.getInstance().getConnection();
 
-    public Boolean createPayment(int orderId, int paymentTypeId, String cardNumber, String cvvNumber, String cardExpire){
+    public int createPayment(int paymentTypeId, String cardNumber, String cvvNumber, String cardExpire){
         PreparedStatement pst = null;
+        ResultSet rs = null;
+        int paymentId = -1;
         try{
-           pst= con.prepareStatement(Query.CREATE_PAYMENT);
-           pst.setInt(1, orderId);
-            pst.setInt(2, paymentTypeId);
-            pst.setString(3, cardNumber);
-            pst.setString(4, cvvNumber);
-            pst.setString(5, cardExpire);
+           pst= con.prepareStatement(Query.CREATE_PAYMENT ,PreparedStatement.RETURN_GENERATED_KEYS);
+            pst.setInt(1, paymentTypeId);
+            pst.setString(2, cardNumber);
+            pst.setString(3, cvvNumber);
+            pst.setString(4, cardExpire);
 
             int rowApply = pst.executeUpdate();
             if(rowApply>0){
-                System.out.println("Already Already add to payment to DB");
+                rs = pst.getGeneratedKeys();
+                if (rs.next()) {
+                    paymentId = rs.getInt(1);
+                }
             }
 
         }catch (SQLException e){
@@ -40,7 +45,8 @@ public class PaymentController {
                 e.printStackTrace();
             }
         }
-        return true
+        return paymentId
                 ;
     }
+
 }

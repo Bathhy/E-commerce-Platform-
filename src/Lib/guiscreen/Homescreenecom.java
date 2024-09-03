@@ -1,6 +1,7 @@
 package Lib.guiscreen;
 
 import Extension.Extension;
+import Navigator.Navigate;
 import connection.MyDBConnection;
 import constant.Constant;
 import constant.Query;
@@ -32,9 +33,11 @@ public class Homescreenecom extends JFrame {
     private CartController cartcontrol;
     private ProfileModel prof = ProfileModel.getInstance();
 
+
     Connection con = MyDBConnection.getInstance().getConnection();
 
     public void getProduct() {
+
         try {
             String query = Query.GET_PRODUCT;
             PreparedStatement pst = con.prepareStatement(query);
@@ -111,10 +114,10 @@ public class Homescreenecom extends JFrame {
                 showPanel("Profile");
             }
         });
-
+        Navigate nav = new Navigate(this);
         logoutButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                nav.navigatelogin(e);
             }
         });
 
