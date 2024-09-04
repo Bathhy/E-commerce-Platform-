@@ -96,8 +96,8 @@ public class LoginScreen extends JFrame  {
 
         loginbutton = new JButton("Login");
         loginbutton.setBounds(150, 140, 100, 30);
-        usertextField.setText("bake");
-        passwordField.setText("1290");
+        usertextField.setText("Joji");
+        passwordField.setText("joji12345");
 
         loginbutton.addActionListener(e -> {
             if(usertextField.getText().isEmpty() || passwordField.getText().isEmpty() ) {

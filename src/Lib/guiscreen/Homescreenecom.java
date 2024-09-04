@@ -29,6 +29,7 @@ public class Homescreenecom extends JFrame {
     private JTextField searchField;
     private List<ProductModel> product = new ArrayList<>();
     private List<ProductModel> filteredProducts = new ArrayList<>();
+    private ProductModel prod = ProductModel.getInstance();
     private JPanel homeContentPanel;
     private CartController cartcontrol;
     private ProfileModel prof = ProfileModel.getInstance();
@@ -49,7 +50,7 @@ public class Homescreenecom extends JFrame {
                 System.out.println("Price: " + resp.getDouble("price"));
                 System.out.println("Images: " + resp.getString("images"));
                 System.out.println("Seller ID: " + resp.getString("seller_name"));
-                ProductModel prod = new ProductModel(resp.getString("name"), resp.getDouble("price"),
+                 prod = new ProductModel(resp.getString("name"), resp.getDouble("price"),
                         resp.getString("images"),
                         resp.getString("seller_name"), resp.getInt("product_id"));
                 product.add(prod);
@@ -230,11 +231,10 @@ public class Homescreenecom extends JFrame {
 
 
     private void displayProducts(List<ProductModel> productsToDisplay) {
-        homeContentPanel.removeAll(); // Clear the existing products
+        homeContentPanel.removeAll();
         System.out.println("----------=+++userid :"+ prof.getCustomid());
         for (ProductModel prod : productsToDisplay) {
             homeContentPanel.add(new CardGridview(new JButton("Add to Cart"), prod, e -> {
-//                System.out.println("this is passing----->>>:"+prof.getCustomid());
                 int cartid = cartcontrol.getOrCreateCart(prof.getCustomid());
 //                System.out.println(" display Cartid: " + cartid);
                 if (cartid != -1) {

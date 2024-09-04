@@ -62,7 +62,7 @@ public class CreditCardPaymentForm extends JFrame {
         frame.setSize(Constant.screenwidth, Constant.screenheight); // Adjusted size to fit the new layout
         frame.setLayout(new GridBagLayout());
         frame.setLocationRelativeTo(null);
-
+//        frame.setIconImage(Constant.fakeimage);
 
 
         // Create a GridBagConstraints object for layout

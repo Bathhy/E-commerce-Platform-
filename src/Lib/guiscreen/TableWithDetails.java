@@ -106,34 +106,6 @@ public class TableWithDetails extends  JFrame{
             JScrollPane scrollPane = new JScrollPane(table);
             frame.add(scrollPane, BorderLayout.CENTER);
 
-            // Create a popup menu
-//            JPopupMenu popupMenu = new JPopupMenu();
-//
-//            JMenuItem editProduct = new JMenuItem("Edit Product");
-//            JMenuItem changeFeature = new JMenuItem("Change Feature");
-//            JMenuItem addProduct = new JMenuItem("Add Product");
-//            JMenuItem deleteProduct = new JMenuItem("Delete Product");
-//            JMenuItem copyProduct = new JMenuItem("Copy Product");
-//            JMenuItem pasteProduct = new JMenuItem("Paste Product");
-//            JMenuItem selectAllProducts = new JMenuItem("Select All Products");
-//            JMenuItem copySelectedProducts = new JMenuItem("Copy Selected Products");
-//            JMenuItem exportSelectedProducts = new JMenuItem("Export Selected Products");
-//            JMenuItem printSelectedProducts = new JMenuItem("Print Selected Products");
-//            JMenuItem printSelectedProductsPDF = new JMenuItem("Print Selected Products as PDF");
-//
-//            popupMenu.add(editProduct);
-//            popupMenu.add(changeFeature);
-//            popupMenu.add(addProduct);
-//            popupMenu.add(deleteProduct);
-//            popupMenu.addSeparator();
-//            popupMenu.add(copyProduct);
-//            popupMenu.add(pasteProduct);
-//            popupMenu.addSeparator();
-//            popupMenu.add(selectAllProducts);
-//            popupMenu.add(copySelectedProducts);
-//            popupMenu.add(exportSelectedProducts);
-//            popupMenu.add(printSelectedProducts);
-//            popupMenu.add(printSelectedProductsPDF);
 
             // Add a mouse listener to the table for the popup menu
             table.addMouseListener(new MouseAdapter() {
