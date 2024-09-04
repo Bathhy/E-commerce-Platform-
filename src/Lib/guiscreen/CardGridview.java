@@ -1,5 +1,6 @@
 package Lib.guiscreen;
 
+import constant.Constant;
 import model.CartModel;
 import model.ProductModel;
 
@@ -15,8 +16,9 @@ public class CardGridview extends JPanel {
 
 
     private int quantity = 0;
-
+    private ProductModel productModel = ProductModel.getInstance();
     public CardGridview(JButton actionButton, Object model, ActionListener onClick) {
+
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
         setPreferredSize(new Dimension(300, 150));
@@ -35,7 +37,7 @@ public class CardGridview extends JPanel {
             sellerName = cartModel.getSellerName();
             quantity = cartModel.getQuantity();
         } else if (model instanceof ProductModel) {
-            ProductModel productModel = (ProductModel) model;
+             productModel = (ProductModel) model;
             productName = productModel.getProductname();
             price = productModel.getPrice();
             productImage = productModel.getProductImage();
@@ -69,8 +71,8 @@ public class CardGridview extends JPanel {
         // Load and scale the image
         BufferedImage originalImage = null;
         try {
-//            String formattedPath = productImage.replace("\\", "/");
-            File imageFile = new File(productImage);
+            // Corrected path format
+            File imageFile = new File(Constant.fakeimage);
 
             if (imageFile.exists()) {
                 originalImage = ImageIO.read(imageFile);
@@ -89,6 +91,7 @@ public class CardGridview extends JPanel {
         } else {
             boxPanel.add(new JLabel("Image could not be read."));
         }
+
 
 
         add(boxPanel, BorderLayout.CENTER);

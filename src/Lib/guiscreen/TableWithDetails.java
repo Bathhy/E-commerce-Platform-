@@ -8,6 +8,7 @@ import controller.CartController;
 import controller.OrderController;
 import model.CartModel;
 import model.OrderDetailModel;
+import model.OrderModel;
 import model.ProfileModel;
 
 import javax.swing.*;
@@ -24,6 +25,7 @@ import java.util.Vector;
 
 public class TableWithDetails extends  JFrame{
     private Vector<OrderDetailModel> orderDetailData = new Vector<>();
+    private OrderModel ord = OrderModel.getInstance();
     private final OrderController control = new OrderController();
     private ProfileModel ProfileModel = model.ProfileModel.getInstance();
     private Connection con = MyDBConnection.getInstance().getConnection();
@@ -43,7 +45,7 @@ public class TableWithDetails extends  JFrame{
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(Constant.screenwidth, Constant.screenheight);
             frame.setLayout(new BorderLayout());
-
+            frame.setLocationRelativeTo(null);
             // Set frame background color
             frame.getContentPane().setBackground(Color.WHITE);
 
@@ -59,27 +61,15 @@ public class TableWithDetails extends  JFrame{
                     "Customer Username",
                     "Order Date"
             };
-//            orderDetailData = control.getOrdersDetail(2);
-//            // Define sample data
-////            Object[][] data = {
-////                    {"Product 1", 5, "Seller A", 20.0, 100.0, 100.0, "Credit Card", "user1", "2024-07-01"},
-////                    {"Product 2", 2, "Seller B", 15.0, 30.0, 30.0, "PayPal", "user2", "2024-07-02"},
-////                    {"Product 3", 10, "Seller C", 25.0, 250.0, 250.0, "Debit Card", "user3", "2024-07-03"}
-////            };
-//
-//            // Create a JTable with data and column names
-//            JTable table = new JTable();
-//            DefaultTableModel mod = (DefaultTableModel) table.getModel();
-//            mod.setRowCount(0);
-//            mod.addRow(orderDetailData);
-//            table.setModel(mod);
             DefaultTableModel mod = new DefaultTableModel(columnNames, 0);
-
-            // Retrieve data from controller
 //            orderDetailData = control.getOrdersDetail(ProfileModel.getCustomid());
             CartModel firstCartItem = cart.get(0);
             int cartId = firstCartItem.getCartid();
-            orderDetailData = control.getOrdersDetail(cartId, ProfileModel.getCustomid());
+            System.out.println("XXXOrderID: "+ord.getOrderID());
+            System.out.println("XXXuseID: "+ProfileModel.getCustomid());
+            System.out.println("XXXCartID: "+cartId);
+//            orderDetailData = control.getOrdersDetail(ord.getOrderID(),ProfileModel.getCustomid(),cartId);
+            orderDetailData = control.getOrdersDetail(ProfileModel.getCustomid());
 
             for (OrderDetailModel orderDetail : orderDetailData) {
                 Object[] row = new Object[]{
@@ -116,34 +106,6 @@ public class TableWithDetails extends  JFrame{
             JScrollPane scrollPane = new JScrollPane(table);
             frame.add(scrollPane, BorderLayout.CENTER);
 
-            // Create a popup menu
-//            JPopupMenu popupMenu = new JPopupMenu();
-//
-//            JMenuItem editProduct = new JMenuItem("Edit Product");
-//            JMenuItem changeFeature = new JMenuItem("Change Feature");
-//            JMenuItem addProduct = new JMenuItem("Add Product");
-//            JMenuItem deleteProduct = new JMenuItem("Delete Product");
-//            JMenuItem copyProduct = new JMenuItem("Copy Product");
-//            JMenuItem pasteProduct = new JMenuItem("Paste Product");
-//            JMenuItem selectAllProducts = new JMenuItem("Select All Products");
-//            JMenuItem copySelectedProducts = new JMenuItem("Copy Selected Products");
-//            JMenuItem exportSelectedProducts = new JMenuItem("Export Selected Products");
-//            JMenuItem printSelectedProducts = new JMenuItem("Print Selected Products");
-//            JMenuItem printSelectedProductsPDF = new JMenuItem("Print Selected Products as PDF");
-//
-//            popupMenu.add(editProduct);
-//            popupMenu.add(changeFeature);
-//            popupMenu.add(addProduct);
-//            popupMenu.add(deleteProduct);
-//            popupMenu.addSeparator();
-//            popupMenu.add(copyProduct);
-//            popupMenu.add(pasteProduct);
-//            popupMenu.addSeparator();
-//            popupMenu.add(selectAllProducts);
-//            popupMenu.add(copySelectedProducts);
-//            popupMenu.add(exportSelectedProducts);
-//            popupMenu.add(printSelectedProducts);
-//            popupMenu.add(printSelectedProductsPDF);
 
             // Add a mouse listener to the table for the popup menu
             table.addMouseListener(new MouseAdapter() {

@@ -13,12 +13,13 @@ import java.util.Vector;
 public class OrderController {
 
     Connection con = MyDBConnection.getInstance().getConnection();
-    public Vector<OrderDetailModel> getOrdersDetail(int ordID,int customerId) {
+    public Vector<OrderDetailModel> getOrdersDetail(int customerId) {
         Vector<OrderDetailModel> orderDetailList = new Vector<>();
         try {
             PreparedStatement pst = con.prepareStatement(Query.GET_ORDER_DETAIL);
-            pst.setInt(1, ordID);
-            pst.setInt(2, customerId);
+//            pst.setInt(1, ordID);
+            pst.setInt(1, customerId);
+//            pst.setInt(3, cartId);
             ResultSet resp = pst.executeQuery();
             while (resp.next()) {
                 System.out.println("======================>Get Order Detail data:");

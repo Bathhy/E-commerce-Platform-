@@ -1,6 +1,13 @@
 package model;
 
 public class ProductModel   {
+    private static ProductModel instance;
+    public static ProductModel getInstance() {
+        if (instance == null) {
+            instance = new ProductModel("",0.0,"","",0);
+        }
+        return instance;
+    }
     public ProductModel(String name, double price, String imagePath, String sellerId, int productid) {
         this.productid = productid;
         this.productname = name;
